@@ -1,0 +1,133 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: rgb(218, 41, 83);
+  width: 18%;
+  transition: width 0.3s ease;
+  box-sizing: border-box;
+}
+
+.sidebar.collapsed {
+  width: 4%; 
+}
+.sidebar-header{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: rgba(0, 0, 0, 0.04) solid 1px;
+  background: rgba(0, 0, 0, 0.01);
+}
+.sidebar-header-logo{
+  background: transparent;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 50%;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+
+  
+}
+.sidebar-header-logo img {
+  max-width: 100%;
+  max-height: 100%; 
+}
+.sidebar-header-icon {
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: -10px;
+}
+
+.sidebar-contents-header-text{
+  padding-left: 1.5rem;
+  padding-top: 1rem;
+  color: white;
+}
+.sidebar-contents-list{
+  align-content: center;
+}
+
+.sidebar-contents-list-item {
+  width: 220px;
+  list-style: none;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-contents-list-item-master{
+    height: 40px;
+    width: 210px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.sidebar-contents-list-item-master:hover{
+  background-color: darkseagreen; 
+}
+
+.sidebar-contents-list-master{
+  color: white;
+  padding-left: 1rem;
+    
+}
+.sidebar-contents-list-item-master-content{
+    width: 180px;
+    height: 100px;
+    padding-left: 39px;
+}
+.sidebar-contents-dropdown-list{
+  width: 179px;
+  height: 100px;
+  padding-left: 0px;
+}
+.sidebar-contents-master-dropdown-list-parts{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    padding-left: 20px;
+}
+.sidebar-contents-master-dropdown-list-ptw{
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding-left: 20px;
+}
+.dropdown-item-parts,.dropdown-item-ptw{
+  list-style: none;
+}
+.sidebar-contents-master-dropdown-list-parts:hover,.sidebar-contents-master-dropdown-list-ptw:hover{
+  background-color: darkseagreen; 
+}
+.dropdown-item-parts-text,.dropdown-item-ptw-text{
+    color: white;
+    margin-top: 27px;
+    margin-left: 25px;
+}
+
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 25%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    z-index: 1; 
+  }
+
+  .sidebar.collapsed {
+    width: 0; 
+  }
+}

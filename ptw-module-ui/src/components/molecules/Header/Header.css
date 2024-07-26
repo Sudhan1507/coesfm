@@ -1,0 +1,43 @@
+
+  .header-title-text{
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #495057;
+    font-family: "Roboto", sans-serif;
+    padding: 10px 23px;
+  }
+  .header-nav{
+    display: flex;
+    justify-content: space-between;
+  }
+ 
+  .header-title-logo img{
+    border-radius: 50%;
+    height: 30px;
+    padding: 5px 0;
+  }
+  
+  .header.expanded {
+    width: 82%;
+    margin-left: 18%;
+    box-sizing: border-box;
+    transition: width 0.3s ease;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .header.collapsed {
+    width: 96%;
+    margin-left: 4%;
+    box-sizing: border-box;
+    transition: padding-left 0.3s ease;
+    border-bottom: 1px solid #ccc;
+    
+  }
+
+  @media (min-width: 768px) {
+    .header {
+      width: 82%;
+      margin-left: 18%;
+    }
+  }
+  

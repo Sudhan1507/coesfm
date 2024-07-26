@@ -1,0 +1,42 @@
+.drawer {
+    position: fixed;
+    background-color: white;
+    overflow: auto;
+    transition: 0.3s ease-out;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+    
+  .drawer-open-fromBottom {
+    transform: translateY(0);
+}
+
+.drawer-close-fromLeft {
+    transform: translateX(-100%);
+}
+
+.drawer-close-fromTop {
+    transform: translateY(-100%);
+}
+
+.drawer-close-fromRight {
+    transform: translateX(100%);
+}
+
+.drawer-close-fromBottom {
+    transform: translateY(100%);
+} 
+
+
+
+@media (max-width: 1024px) {
+    .drawer-close-fromLeft,
+    .drawer-close-fromRight {
+        transform: translateX(-100%);
+    }
+
+    .drawer-close-fromTop,
+    .drawer-close-fromBottom {
+        transform: translateY(-100%);
+    }
+}

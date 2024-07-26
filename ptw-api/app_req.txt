@@ -1,0 +1,37 @@
+Node js pre-requisites:
+
+Step 1: Setup
+Install Node.js: Download and install Node.js from nodejs.org.
+Initialize Project: Create a new directory for your project and initialize it with npm.
+
+{
+mkdir my-node-api
+cd my-node-api
+npm init -y
+}
+
+Step 2: Install Required Packages
+Install the following npm packages:
+
+Express: A web framework for Node.js.
+MySQL: MySQL database client for Node.js.
+Body-Parser: Middleware to parse incoming request bodies.
+Nodemon: Utility to automatically restart the server on changes (optional for development).
+
+{
+npm install express mysql body-parser
+npm install --save-dev nodemon
+}
+
+Install Additional Packages
+Install the following npm packages:
+
+express-validator: For validation.
+jsonwebtoken: For authentication.
+bcryptjs: For password hashing.
+dotenv: For environment variables.
+morgan: For logging requests.
+
+{
+npm install express-validator jsonwebtoken bcryptjs dotenv morgan
+}

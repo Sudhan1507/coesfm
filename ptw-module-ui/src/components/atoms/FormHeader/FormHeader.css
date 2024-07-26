@@ -1,0 +1,25 @@
+.formheader-wrapper{
+    background: #f2f3f7;
+    padding: 0px 20px;
+    border-bottom: .8px solid #dbdde0;
+  }
+  .formheader-title{
+    color: #495057;
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  @media (min-width: 768px) {
+    .formheader-wrapper {
+      padding: 15px 20px;
+    }
+  
+    .formheader-title {
+      font-size: 15px; 
+    }
+  }
