@@ -52,25 +52,12 @@ const Login = () => {
                 const response = await axios.post('http://localhost:8080/account/login', formData);
                 if (response.data.status === 'success' && response.data.data) {
                     sessionStorage.setItem('userdata',JSON.stringify( response.data.data));
-                    // sessionStorage.getItem('userdata')
                     console.log('User logged in successfully:', response.data.data.token);
                     handleClear();
                     navigate('/dashboard');
-                    // showAlert({
-                    //   type: 'success',
-                    //   message: 'User logged in successfully.',
-                    //   duration: 3000,
-                    //   icon: <CheckCircleOutlineIcon />
-                    // });
                 }
             } catch (error) {
                 console.error('Error User login:', error);
-                // showAlert({
-                //   type: 'error',
-                //   message: 'Failed to log in.',
-                //   duration: 3000,
-                //   icon: <ErrorOutlineOutlinedIcon />
-                // });
             }
         }
     };

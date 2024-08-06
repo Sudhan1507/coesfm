@@ -80,13 +80,13 @@ const Table = ({ data, headers }) => {
   return (
     <div className="table-container">
       <div className="controls">
-      <div className="rows-per-page">
+        <div className="rows-per-page">
           <select value={rowsPerPage} onChange={handleRowsPerPageChange}>
             <option value={10}>10 entries</option>
             <option value={15}>15 entries</option>
             <option value={25}>25 entries</option>
           </select>
-          </div>
+        </div>
         <div className="search-wrapper">
           <input
             type="text"
@@ -103,53 +103,50 @@ const Table = ({ data, headers }) => {
           <tr>
             {headers.map((header) => (
               <th key={header.key} onClick={() => header.sortable && requestSort(header.key)}>
-                 <div className="header-content">
-                {header.label} {header.sortable && getSortIcon(header.key)}
+                <div className="header-content">
+                  {header.label} {header.sortable && getSortIcon(header.key)}
                 </div>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-        {currentRows.length > 0 ? (
-          currentRows.map((row,rowIndex) => (
-            <tr key={row.id || rowIndex}>
-              {headers.map(header => (
-                <td key={`${header.key} - ${row.id || rowIndex}`}>
-                 { (header.renderer)? header.renderer(row) : row[header.key] }
+          {currentRows.length > 0 ? (
+            currentRows.map((row, rowIndex) => (
+              <tr key={row.id || rowIndex}>
+                {headers.map(header => (
+                  <td key={`${header.key}-${row.id || rowIndex}`}>
+                    {header.renderer ? header.renderer(row) : row[header.key]}
                   </td>
-              ))}
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={headers.length}>
+                <span className="no-data">No data available</span>
+              </td>
             </tr>
-          ))
-        ) : (
-          <tr>
-          <td colSpan={headers.length}>
-            <span className="no-data">
-            No data available
-            </span>
-            </td>
-        </tr>
           )}
         </tbody>
       </table>
       {/* Pagination */}
       <div className="pagination-controls">
         <div className="entries-info">
-        Showing {filteredData().length === 0 ? '0' : indexOfFirstRow + 1 } - {Math.min(indexOfLastRow, filteredData().length)} of {filteredData().length} entries
+          Showing {filteredData().length === 0 ? '0' : indexOfFirstRow + 1 } - {Math.min(indexOfLastRow, filteredData().length)} of {filteredData().length} entries
         </div>
-      <div className="pagination">
-        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index + 1} onClick={() => paginate(index + 1)} className={index + 1 === currentPage ? 'active' : ''}>
-            {index + 1}
-          </button>
-        ))}
-        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === 1}>Next</button>
+        <div className="pagination">
+          <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button key={index + 1} onClick={() => paginate(index + 1)} className={index + 1 === currentPage ? 'active' : ''}>
+              {index + 1}
+            </button>
+          ))}
+          <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
 
 export default Table;
-

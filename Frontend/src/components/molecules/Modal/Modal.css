@@ -15,7 +15,7 @@
   }
 
   .modal-wrapper {
-    padding: 180px 550px;
+    padding: 10px 500px;
   }
   
   .modal-content {
@@ -36,6 +36,7 @@
     align-items: center;
   }
   .modal-footer {
+    border-top: .8px solid grey;
     padding: 5px 5px;
     display: flex;
     justify-content: space-between;
@@ -66,7 +67,7 @@
   }
   
   .modal-body {
-    margin: 20px 5px;
+    margin: 30px 5px;
     color: #52575c;
   }
   

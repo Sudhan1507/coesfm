@@ -1,13 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import PermitTypeRoutes from './routes/PermitType/pt_routes.js';
-import ChecklistRoutes from './routes/Checklist/checklist_routes.js';
-import RequestorRoutes from './routes/Requestor/requestor_routes.js';
-import FlowRoutes from './routes/Flow/flow_routes.js';
-import AccountRoutes from './routes/Account/account_routes.js';
-import PtwRoutes from './routes/PermitToWork/ptw_routes.js';
-import EmailRoutes from './routes/email_routes.js';
+import PermitTypeRoutes from './routes/PTW_module/PermitType/pt_routes.js';
+import ChecklistRoutes from './routes/PTW_module//Checklist/checklist_routes.js';
+import RequestorRoutes from './routes/PTW_module//Requestor/requestor_routes.js';
+import FlowRoutes from './routes/PTW_module//Flow/flow_routes.js';
+import AccountRoutes from './routes/PTW_module//Account/account_routes.js';
+import PtwRoutes from './routes/PTW_module//PermitToWork/ptw_routes.js';
 import cors from 'cors';
 
 dotenv.config({path:'./app.env'});
@@ -30,7 +29,6 @@ app.use('/flow',FlowRoutes);
 app.use('/requestor',RequestorRoutes);
 app.use('/account',AccountRoutes);
 app.use('/ptw',PtwRoutes);
-app.use('/email',EmailRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

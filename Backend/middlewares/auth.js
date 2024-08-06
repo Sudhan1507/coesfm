@@ -10,8 +10,6 @@ export default function authenticateToken(req, res, next) {
         return res.status(401).json({ error: 'Access denied. No token provided.' });
     }
 
-    console.log('Received token:', token);  // Log the received token for debugging
-
     // Verify the token
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);

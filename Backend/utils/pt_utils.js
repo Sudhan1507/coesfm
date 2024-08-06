@@ -10,10 +10,6 @@ function handleError(res,error){
 
 export default handleError;
 
-export function handleDuplicateNameError(res, error) {
-    if (error.message === 'Duplicate entry for flowName') {
-        res.status(409).json({ status: 'failed', message: 'Duplicate entry for flowName' });
-    } else {
-        res.status(500).json({ status: 'failed', message: 'Internal server error' });
-    }
-}
+export const handleDuplicateNameError = (res, error) => {
+    res.status(409).json({ error: error.message });
+};

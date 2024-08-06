@@ -13,6 +13,10 @@
     align-items: center;
     justify-content: space-between;
   }
+  .formheader-close-icon {
+    cursor: pointer;
+    margin-left: 10px;
+  }
 
   @media (min-width: 768px) {
     .formheader-wrapper {
