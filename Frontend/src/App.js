@@ -7,6 +7,7 @@ import NewPermitApp from "./components/organisms/Create/PTW_module/NewPermitApp/
 import Login from "./Views/Login/Login.js";
 import Layout from "./components/molecules/Layout/Layout.js";
 import PrivateRoutes from "./utils/PrivateRoutes.js";
+import Parts from "./Views/Parts_module/Parts/Parts.js";
 
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
     <Routes>
       <Route element={<PrivateRoutes/>}>
         <Route path="/dashboard" element={<Layout/>}/>
+        <Route path="/parts" element={<Parts/>}/>
         <Route path="/permitTowork" element={<PermitToWork/>}/>
         <Route path="/managePTW" element={<ManagePTW/>}/>
         <Route path="/approvalFlow" element={<ApprovalFlow/>}/>

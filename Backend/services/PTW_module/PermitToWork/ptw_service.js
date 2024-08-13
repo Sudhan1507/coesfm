@@ -7,7 +7,6 @@ export default class PermitToWorkService{
           return permitToWork;
         }catch(err){
             console.error('Error in getAllPermitToWorkService: ', err);
-            throw err;
         }
     }
     static async getPermitTypeByIdService(ptId){
@@ -16,7 +15,6 @@ export default class PermitToWorkService{
             return permitType;
         }catch(err){
             console.error('Error in getPermitTypeByIdService: ', err);
-            throw err;
         }
     }
 
@@ -26,7 +24,6 @@ export default class PermitToWorkService{
             return permitTypeName;
         }catch(err){
             console.error('Error in getPermitTypeNameService: ', err);
-            throw err;
         }
     }
     static async addMultipleChecklistResponsesService(payload) {
@@ -36,7 +33,6 @@ export default class PermitToWorkService{
             console.log('{ status: Update multiple checklist options service: success }');
         } catch (err) {
             console.error('Error in addMultipleChecklistResponsesService: ', err);
-            throw err;
         }
     }
 
@@ -46,7 +42,6 @@ export default class PermitToWorkService{
             return signOff;
         }catch(err){
             console.error('Error in getSignOffService: ', err);
-            throw err;
         }
     }
 
@@ -56,7 +51,6 @@ export default class PermitToWorkService{
             console.log('{ status: Add sign-off service: success }');
         } catch (err) {
             console.error('Error in addSignOffService: ', err);
-            throw err;
         }
     }
 
@@ -66,7 +60,6 @@ export default class PermitToWorkService{
             return checklistResponse;
         } catch (err) {
             console.error('Error in getChecklistResponseService: ', err);
-            throw err;
         }
     }
 
@@ -76,7 +69,6 @@ export default class PermitToWorkService{
             return signOffHistory;
         } catch (err) {
             console.error('Error in getSignOffHistoryService: ', err);
-            throw err;
         }
     }
 
@@ -86,7 +78,6 @@ export default class PermitToWorkService{
             console.log('{ status: Delete permit-to-work service: success }');
         } catch (err) {
             console.error('Error in deletePermitToWorkService: ', err);
-            throw err;
         }
     }
 
@@ -96,7 +87,6 @@ export default class PermitToWorkService{
             console.log('{ status: Update assignment service: success }');
         } catch (err) {
             console.error('Error in updateAssignmentService: ', err);
-            throw err;
         }
     }
 
@@ -108,11 +98,9 @@ export default class PermitToWorkService{
             // Then insert the sign off entry
             await PermitToWorkDao.insertAppSignOff(appId, statusName, userId);
 
-            console.log('{ status: Cancel permit-to-work service: success }');
             return true;
         } catch (err) {
             console.error('Error in cancelPermitToWorkService: ', err);
-            throw err;
         }
     }
 
@@ -127,7 +115,6 @@ export default class PermitToWorkService{
             return { success: true, message: 'Application flow restarted successfully.' };
         } catch (err) {
             console.error('Error processing application restart: ', err);
-            throw err;
         }
     }
 
@@ -138,7 +125,6 @@ export default class PermitToWorkService{
             console.log('{ status: Update checklist response service: success }');
         } catch (err) {
             console.error('Error in updateChecklistResponseService: ', err);
-            throw err;
         }
     }
     static async updateAppStatusService(appId,appStatus,updatedBy){
@@ -148,7 +134,6 @@ export default class PermitToWorkService{
             return true;
         }catch(err){
             console.error('Error in updateAppStatusService: ', err);
-            throw err;
         }
     }
     static async insertAppSignOffService(appId, statusName, userId) {
@@ -158,7 +143,6 @@ export default class PermitToWorkService{
             return true;
         } catch (err) {
             console.error('Error in insertAppSignOff: ', err);
-            throw err;
         }
     }
 
@@ -168,7 +152,6 @@ export default class PermitToWorkService{
             return result;
         }catch (err) {
             console.error('Error in getChecklistPdfService: ', err);
-            throw err;
         }
     }
 
@@ -178,7 +161,6 @@ export default class PermitToWorkService{
             return result;
         }catch (err) {
             console.error('Error in getSignOffPdfService: ', err);
-            throw err;
         }   
     }
 }

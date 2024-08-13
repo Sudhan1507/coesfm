@@ -9,7 +9,6 @@ export default class PermitTypeService{
             console.log('{ status: create Permit type service: success }',service);
         }catch(err){
             console.error('Error in createPermitTypeService: ',err);
-            throw err;
         }
     }
 
@@ -21,7 +20,6 @@ export default class PermitTypeService{
             
         }catch(err){
             console.error('Error in getPermitTypeService: ', err);
-            throw err;
         }
     }
 
@@ -32,7 +30,6 @@ export default class PermitTypeService{
             return updatedPermitType;
         }catch(err){
             console.error('Error in updatePermitTypeService: ',err);
-            throw err;
         }
     }
 
@@ -42,10 +39,8 @@ export default class PermitTypeService{
         }
         try{
             const result=  await PermitTypeDao.deletePermitType(ptId);
-            console.log('{ status: Delete Permit type service: success }');
         }catch(err){
             console.error('Error in deletePermitTypeService: ',err);
-            throw err;
         }
     }
 };

@@ -28,6 +28,7 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import RequestChange from "../../../../components/organisms/Create/PTW_module/PermitToWorkFunctions/RequestChange/RequestChange";
 import UpdateChecklist from "../../../../components/organisms/Update/PTW_module/Checklist/UpdateChecklist.js";
 import GeneratePDF from "../../../../components/organisms/Create/PTW_module/GeneratePDF/GeneratePDF";
+import Alert from "../../../../components/atoms/Alert/Alert.js";
 
 const PermitToWork = () => {
   const userdata = getUserData();
@@ -100,27 +101,24 @@ const PermitToWork = () => {
 
  
 
-  const showAlertHandler = (type, message) => {
-    let icon = null;
-    switch (type) {
-      case 'success':
-        icon = <CheckCircleOutlineSharpIcon />;
-        break;
-      case 'error':
-        icon = <ErrorOutlineOutlinedIcon />;
-        break;
-      default:
-        icon = null;
-        break;
-    }
-
+   // Function to show an alert
+   const showAlertHandler = ({ type, message, duration, icon }) => {
     setShowAlert({
       show: true,
-      type: type,
-      message: message,
-      duration: 3000,
-      icon: icon,
+      type,
+      message,
+      duration,
+      icon
     });
+    setTimeout(() => {
+      setShowAlert({
+        show: false,
+        type: '',
+        message: '',
+        duration: 3000,
+        icon: null,
+      });
+    }, duration);
   };
 
 
@@ -288,9 +286,6 @@ const PermitToWork = () => {
       {requestChange && (
         <RequestChange row={requestChange} onClose={handleCloseRequestChangeModal} showAlert={showAlertHandler} />
       )}
-      {/* {generatePdf && (
-    <GeneratePDF row={generatePdf} />
-)} */}
         <div className='container-wrapper'>
           <div className='container-header'>
             <div className='container-header-text'>
@@ -328,7 +323,10 @@ const PermitToWork = () => {
             <Table data={data} headers={headers} />
           </div>
         </div>
-      </Layout>
+        {showAlert.show && (
+        <Alert type={showAlert.type} message={showAlert.message} duration={showAlert.duration} icon={showAlert.icon} />
+      )}     
+       </Layout>
     </>
   );
 };

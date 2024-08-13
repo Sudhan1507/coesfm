@@ -1,11 +1,10 @@
-import axiosInstance from "../../../../../services/service";
 import Modal from "../../../../molecules/Modal/Modal";
 import { useState } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import axiosInstance from "../../../../../services/service";
 
-
-const DeletePermit =({row,onClose,showAlert})=>{
+const DeleteParts=({row,onClose,showAlert})=>{
     const [modalOpen ,setModalOpen]=useState(true);
 
     const handleCloseModal=()=>{
@@ -13,21 +12,21 @@ const DeletePermit =({row,onClose,showAlert})=>{
         onClose();
     }
 
-    const deletePermitToWork=async()=>{
+    const deleteParts=async()=>{
     try{
-     const response=   await axiosInstance.delete(`/ptw/deleteApp/${row.appId}`);
+     const response=  await axiosInstance.delete(`/parts/delete/${row.partId}`);
      if(response.data.status==='success'){
         handleCloseModal();
         showAlert({
             type: 'success',
-            message: `Application ID:${row.appId} has been successfully deleted.`,
+            message: `Part deleted successfull.`,
             duration: 3000,
             icon: <CheckCircleOutlineIcon />
           });      
      }else{
         showAlert({
             type: 'error',
-            message: `Failed to delete Permit Application ID:${row.appId}.`,
+            message: `Failed to delete part.`,
             duration: 3000,
             icon: <ErrorOutlineOutlinedIcon />
           });
@@ -42,19 +41,18 @@ const DeletePermit =({row,onClose,showAlert})=>{
     return(
         <>
         <Modal 
-         open={modalOpen}
-         onClose={handleCloseModal}
-         title={`Do you want to delete Permit Application ID:${row.appId}`}
-         buttons={[
-            { label: 'Delete', onClick: deletePermitToWork, className: 'confirm' },
-            { label: 'Cancel', onClick: handleCloseModal, className: 'cancel' }
+          open={modalOpen}
+          onClose={handleCloseModal}
+          title={`Confirm Delete`}
+          buttons={[
+              { label: 'Yes', onClick: deleteParts, className: 'confirm' },
+              { label: 'No', onClick: handleCloseModal, className: 'cancel' }
           ]}
-        >
-           <p>This item will be deleted immediately. You cannot undo this action.</p>
+      >
+          <p>Are you sure you want to delete this Part?</p>
+          <p>Part ID:<strong>{row.partId}</strong> </p>
           </Modal> 
         </>
     )
 };
-
-
-export default DeletePermit;
+export default DeleteParts;

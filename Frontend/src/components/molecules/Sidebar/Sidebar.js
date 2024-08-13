@@ -49,7 +49,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                 {isDropdownOpen && (
                   <ul className='sidebar-contents-dropdown-list'>
                   <div className='sidebar-contents-master-dropdown-list-parts'>
-                  <li className='dropdown-item-parts'>
+                  <li className='dropdown-item-parts' onClick={()=>{navigate('/parts')}}>
                     <BuildIcon sx={{ color: 'white', verticalAlign: 'middle', fontSize: '1rem', marginLeft: '-0.5rem' }} />
                     <span className='dropdown-item-parts-text'>Parts</span> 
                     </li>

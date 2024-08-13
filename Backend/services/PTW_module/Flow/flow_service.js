@@ -16,7 +16,6 @@ export default class FlowService{
             return isUnique;
         } catch (err) {
             console.error('Error in checkFlowNameService: ', err);
-            throw err;
         }
     }
     static async getFlowIndexService(){
@@ -38,7 +37,6 @@ export default class FlowService{
             return result;
         } catch (err) {
             console.error('Error in deleteFlowDetailsService:', err);
-            throw err; // Ensure the error is rethrown to be caught by the controller
         }
     }
 
@@ -65,7 +63,6 @@ export default class FlowService{
             return { flowId };
         } catch (error) {
             console.error('Error executing SQL: ', error);
-            throw error; // Re-throw the error to handle it upstream
         }
     }
     static async getFlowNameService(flowId) {
