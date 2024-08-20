@@ -1,71 +1,75 @@
 .alert {
-    position: fixed;
-    top: 20px;
-    right: 500px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-  
-  .alert-content {
-    display: flex;
-    align-items: center;
-  }
-  
-  .alert-icon {
-    margin-right: 10px;
-  }
-  
-  .alert-success {
-    background-color: green;
-  }
-  
-  .alert-failure {
-    background-color: red;
-  }
-  
-  .alert-error {
-    background-color: darkred;
-  }
-  
-  .alert-loading {
-    width: 100%;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    animation: loading linear;
-  }
-  
-  @keyframes loading {
-    from {
-      width: 100%;
-    }
-    to {
-      width: 0;
-    }
-  }
+  position: fixed;
+  top: 20px;
+  right: 20px; /* Adjusted for better initial positioning */
+  left: 20px;  /* Added to ensure the alert is within the screen width */
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: 90vw; /* Ensuring it doesn't exceed viewport width */
+  box-sizing: border-box; /* Ensures padding is included within the width */
+}
 
-  @media (max-width: 768px) {
-    .alert {
+.alert-content {
+  display: flex;
+  align-items: center;
+}
+
+.alert-icon {
+  margin-right: 0.5rem;
+}
+
+.alert-success {
+  background-color: green;
+}
+
+.alert-failure {
+  background-color: red;
+}
+
+.alert-error {
+  background-color: darkred;
+}
+
+.alert-loading {
+  width: 100%;
+  height: 0.3rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  animation: loading linear;
+}
+
+@keyframes loading {
+  from {
+      width: 100%;
+  }
+  to {
+      width: 0;
+  }
+}
+
+/* Media query for devices with max-width of 768px */
+@media (max-width: 768px) {
+  .alert {
       right: 10px;
       left: 10px;
-      width: auto;
-    }
-  
-    .alert-content {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .alert-icon {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
+      padding: 0.5rem 1rem; /* Adjust padding for smaller screens */
+      align-items: center; /* Center align items on smaller screens */
   }
-  
+
+  .alert-content {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .alert-icon {
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+  }
+}

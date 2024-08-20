@@ -159,7 +159,7 @@ const Parts = () => {
               iconSize='1rem'
               variant="success"
               type="button"
-              size="large"
+              size="medium"
               onClick={() => handleOpenDrawer("add")}
             />
           </div>
