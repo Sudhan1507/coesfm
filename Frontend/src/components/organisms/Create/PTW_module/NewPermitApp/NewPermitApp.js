@@ -36,7 +36,7 @@ const NewPermitApp = () => {
     setPermitTypeName(selectedPermitTypeName);
     const selectedChecklistId = permitTypeOptions.find((option) => option.value === +selectedPermitType)?.id || '';
     setChecklistId(selectedChecklistId);
-    setIsEmailVisible(true); // Show email input and send button when a permit type is selected
+    setIsEmailVisible(true); 
     setErrors({ ...errors, permitType: '' });
 
      // Fetch checklist data based on selected permit type
@@ -44,7 +44,6 @@ const NewPermitApp = () => {
      .then((res) => {
        if (res.data.status === "success" && Array.isArray(res.data.data)) {
          setChecklistData(res.data.data);
-         console.log(res.data.data);
        } else {
          setChecklistData([]);
          showAlertHandler({
@@ -132,8 +131,7 @@ useEffect(() => {
 };
 
 
-const handleSubmit = (formData) => {
-  console.log('Form submitted:', formData);
+const handleSubmit = () => {
 };
 
 
@@ -192,7 +190,7 @@ const handleSubmit = (formData) => {
           <Checklist
             ptId={permitType}
             permitTypeName={permitTypeName}
-            checklistId={checklistId} // You may want to update this based on your actual implementation
+            checklistId={checklistId}
             checklistData={checklistData}
             onSave={handleSubmit}
           />

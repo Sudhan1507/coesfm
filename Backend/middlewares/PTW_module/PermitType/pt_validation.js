@@ -2,7 +2,7 @@
 export function validatePermitType(data) {
     const { ptName, checklistId, flowId, reqId, remarks, active, createdBy } = data;
 
-    if (!ptName || typeof ptName !== 'string'|| ptName.trim().length === 0) {
+    if (!ptName || typeof ptName !== 'string' || ptName.trim().length === 0) {
         throw new Error('Invalid Permit Type Name');
     }
     if (typeof checklistId !== 'number' || checklistId < 0) {
@@ -20,7 +20,7 @@ export function validatePermitType(data) {
     if (!active || typeof active !== 'string') {
         throw new Error('Invalid Active status');
     }
-    if(!createdBy || typeof createdBy !== 'number' || createdBy < 0) {
+    if (typeof createdBy !== 'number' || createdBy < 0) {
         throw new Error('Invalid CreatedBy');
     }
 }

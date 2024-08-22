@@ -13,20 +13,20 @@
 }
 
 @media (max-width: 1024px) {
-  .expanded .maincontent-container {
-    width: 90%;
+  .maincontent-container.expanded {
+    width: calc(100% - 10%);
     margin-left: 10%;
   }
 
-  .collapsed .maincontent-container {
-    width: 96%;
+  .maincontent-container.collapsed {
+    width: calc(100% - 4%);
     margin-left: 4%;
   }
 }
 
 @media (max-width: 768px) {
-  .expanded .maincontent-container,
-  .collapsed .maincontent-container {
+  .maincontent-container.expanded,
+  .maincontent-container.collapsed {
     width: 100%;
     margin-left: 0;
   }

@@ -92,6 +92,7 @@ const ViewChecklist = ({ row, onClose }) => {
                                             name={`response-${index}`}
                                             value='yes'
                                             checked={item.response === 'yes'}
+                                            readOnly
                                         /> Yes
                                     </label>
                                     <label>
@@ -100,6 +101,7 @@ const ViewChecklist = ({ row, onClose }) => {
                                             name={`response-${index}`}
                                             value='no'
                                             checked={item.response === 'no'}
+                                            readOnly
                                         /> No
                                     </label>
                                     <label>
@@ -108,6 +110,7 @@ const ViewChecklist = ({ row, onClose }) => {
                                             name={`response-${index}`}
                                             value='na'
                                             checked={item.response === 'na'}
+                                            readOnly
                                         /> N/A
                                     </label>
                                 </div>

@@ -1,5 +1,4 @@
 import Table from '../../../../components/molecules/Table/Table.js';
-import '../ApprovalFlow/ApprovalFlow.css';
 import { useState,useEffect, useCallback} from 'react';
 import Tooltip from '../../../../components/atoms/Tooltip/Tooltip.js';
 import DeleteOutlineSharpIcon from '@mui/icons-material/DeleteOutlineSharp';

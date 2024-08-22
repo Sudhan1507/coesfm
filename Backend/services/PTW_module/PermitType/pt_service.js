@@ -1,14 +1,14 @@
 import PermitTypeDao from "../../../dao/PTW_module/PermitType/pt_dao.js";
-import PermitType from "../../../dao/PTW_module/PermitType/pt_dao.js";
 
 export default class PermitTypeService{
-    static async createPermitTypeService(permitTypeData){
-        try{
-            const permitType = new PermitType(permitTypeData);
-          const service=  await PermitTypeDao.createPermitTypeDao(permitType);
-            console.log('{ status: create Permit type service: success }',service);
-        }catch(err){
-            console.error('Error in createPermitTypeService: ',err);
+    static async createPermitTypeService(permitTypeData) {
+        try {
+            const result = await PermitTypeDao.createPermitTypeDao(permitTypeData);
+            console.log('Service result:', result);
+            return result;
+        } catch (err) {
+            console.error('Error in createPermitTypeService:', err);
+            throw err; // Ensure errors are propagated
         }
     }
 

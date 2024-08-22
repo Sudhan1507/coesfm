@@ -1,157 +1,193 @@
-  .btn-small {
-    padding: 16px 20px;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 1.5;
-    border: none;
-    border-radius: 7px;
-    height: 40px;
-    width: 90px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s, transform 0.3s;
-  }
-  
-  .btn-medium {
-    padding: 16px 20px;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 1.5;
-    border: none;
-    border-radius: 7px;
-    height: 40px;
-    width: 125px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s, transform 0.3s;
-  }
-  
-  .btn-large {
-    padding: 16px 20px;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 1.5;
-    border: none;
-    border-radius: 7px;
-    height: 40px;
-    width: 210px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s, transform 0.3s;
-  }
-  .btn-icon {
-    margin-right: 0.5em;
-  }
-  
-  .btn-primary {
-    color: #fff;
-    background-color: #007eff;
-    border-color:  #007eff;
-  }
-  .btn-cancel{
-    color: #fff;
-    background-color: #ff6337;
-    border-color: #ff6337;
-  }
-  
-  .btn-primary:hover {
-    color: #fff;
-    background-color: #0066cc;
-    border-color: #0066cc;
-  }
-  .btn-primary:active {
-    transform: scale(0.95);
+.btn-small {
+  width: 90px;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.5;
+  border: none;
+  border-radius: 0.5rem;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
 }
-  
-  .btn-secondary {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-  }
-  
-  .btn-secondary:active {
-    transform: scale(0.95);
-  }
-  
-  .btn-secondary:hover {
-    color: #fff;
-    background-color: #5a6268;
-    border-color: #545b62;
-  }
-  
-  .btn-danger {
-    color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
-  }
-  
-  .btn-danger:hover {
-    color: #fff;
-    background-color: #c82333;
-    border-color: #bd2130;
-  }
-  .btn-danger:active{
-    transform: scale(0.95);
-  }
-  
-  .btn-success {
-    color: #fff;
-    background-color: #22d69b;
-    border-color: #22d69b;
-  }
-  
-  .btn-success:hover {
-    color: #fff;
-    background-color: #1bb785;
-    border-color: #1bb785;
-  }
-  .btn-success:active{
-    transform: scale(0.95);
-  }
- 
-  .btn-cancel:hover{
-    background-color: #dc3545;
-  }
-  .btn-cancel:active{
-    transform: scale(0.95);
 
+.btn-medium {
+  width: 140px;
+  /* padding: 1rem 1.25rem; */
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.5;
+  border: none;
+  border-radius: 0.5rem;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.btn-large {
+  width: 235px;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.5;
+  border: none;
+  border-radius: 0.5rem;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.btn-icon {
+  margin-right: 0.5em;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #007eff;
+  border-color: #007eff;
+}
+
+.btn-primary:hover {
+  background-color: #0066cc;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-danger:active {
+  transform: scale(0.95);
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #22d69b;
+  border-color: #22d69b;
+}
+
+.btn-success:hover {
+  background-color: #1bb785;
+}
+
+.btn-success:active {
+  transform: scale(0.95);
+}
+
+.btn-cancel {
+  color: #fff;
+  background-color: #ff6337;
+  border-color: #ff6337;
+}
+
+.btn-cancel:hover {
+  background-color: #dc3545;
+}
+
+.btn-cancel:active {
+  transform: scale(0.95);
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1200px) {
+
+  .btn-small {
+      width: 80px;
   }
-  
-  .btn:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
+
+  .btn-medium {
+      width: 120px;
   }
-  
-  @media (max-width: 768px) {
-    .btn {
-      padding: 0.5rem 1rem;
-      font-size: 1.25rem;
-    }
-  
-    .btn-small {
-      padding: 0.375rem 0.75rem;
-      font-size: 1rem;
-    }
-  
-    .btn-medium {
-      padding: 0.5rem 1rem;
-      font-size: 1.25rem;
-    }
-  
-    .btn-large {
-      padding: 0.625rem 1.25rem;
-      font-size: 1.5rem;
-    }
+
+  .btn-large {
+    width: 210px;
   }
+}
+
+@media (max-width: 992px) {
+
+  .btn-small {
+      width: 75px;
+  }
+
+  .btn-medium {
+    width: 120px;
+  }
+
+  .btn-large {
+    width: 210px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .btn-small {
+      width: 70px;
+  }
+
+  .btn-medium {
+    width: 120px;
+  }
+
+  .btn-large {
+    width: 210px;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .btn-small {
+      width: 65px;
+  }
+
+  .btn-medium {
+    width: 120px;
+  }
+
+  .btn-large {
+      width: 210px;
+  }
+}

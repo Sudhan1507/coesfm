@@ -1,3 +1,13 @@
+body{
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-align: left;
+    background-color: #fff;
+}
 .sidebar {
   position: fixed;
   top: 0;
@@ -15,6 +25,7 @@
 .sidebar-header{
   display: flex;
   align-items: center;
+  gap: 10px;
   padding: 1rem;
   border-bottom: rgba(0, 0, 0, 0.04) solid 1px;
   background: rgba(0, 0, 0, 0.01);
@@ -37,17 +48,22 @@
 }
 .sidebar-header-icon {
   cursor: pointer;
-  padding: 0.5rem;
-  margin-left: -10px;
+  padding: 0.5rem 0rem;
 }
 
 .sidebar-contents-header-text{
-  padding-left: 1.5rem;
+  padding-left: 1rem;
   padding-top: 1rem;
   color: white;
+  font-size: 16px;
+
 }
 .sidebar-contents-list{
   align-content: center;
+}
+
+.sidebar-contents-list-headers{
+  padding: 10px 30px;
 }
 
 .sidebar-contents-list-item {
@@ -65,12 +81,8 @@
     width: 210px;
     display: flex;
     align-items: center;
-    border-radius: 5px;
-    padding-left: 10px;
-}
-
-.sidebar-contents-list-item-master:hover{
-  background-color: darkseagreen; 
+    padding: 0px;
+    position: relative;
 }
 
 .sidebar-contents-list-master{
@@ -79,39 +91,39 @@
     
 }
 .sidebar-contents-list-item-master-content{
+    overflow: visible;
     width: 180px;
-    height: 100px;
-    padding-left: 39px;
+    height: auto;
+
 }
 .sidebar-contents-dropdown-list{
   width: 179px;
-  height: 100px;
   padding-left: 0px;
+  top: 40px;
+  background-color: rgb(218, 41, 83);
 }
-.sidebar-contents-master-dropdown-list-parts{
-    height: 40px;
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    padding-left: 20px;
-}
-.sidebar-contents-master-dropdown-list-ptw{
+
+.sidebar-contents-master-dropdown-list-parts,.sidebar-contents-master-dropdown-list-ptw,.sidebar-contents-master-dropdown-list-meter,
+.sidebar-contents-master-dropdown-list-attendance,.sidebar-contents-master-dropdown-list-school,
+.sidebar-contents-master-dropdown-list-report,.sidebar-contents-master-dropdown-list-booking,
+.sidebar-contents-master-dropdown-list-iaq{
   height: 40px;
   display: flex;
   align-items: center;
-  border-radius: 5px;
   padding-left: 20px;
+  color: white;
+  cursor: pointer;
+  justify-content: flex-start;
+
 }
-.dropdown-item-parts,.dropdown-item-ptw{
-  list-style: none;
-}
-.sidebar-contents-master-dropdown-list-parts:hover,.sidebar-contents-master-dropdown-list-ptw:hover{
-  background-color: darkseagreen; 
-}
-.dropdown-item-parts-text,.dropdown-item-ptw-text{
+
+.dropdown-item-parts-text,.dropdown-item-ptw-text,
+.dropdown-item-iaq-text,.dropdown-item-booking-text,
+.dropdown-item-report-text,.dropdown-item-school-text,
+.dropdown-item-attendance-text,.dropdown-item-meter-text{
     color: white;
-    margin-top: 27px;
-    margin-left: 25px;
+    margin-top: 5px;
+    margin-left: 10px;
 }
 
 

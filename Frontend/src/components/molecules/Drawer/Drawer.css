@@ -2,12 +2,24 @@
     position: fixed;
     background-color: white;
     overflow: auto;
-    transition: 0.3s ease-out;
+    transition: transform 0.3s ease-out;
     z-index: 1000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-    
-  .drawer-open-fromBottom {
+}
+
+.drawer-open-fromLeft {
+    transform: translateX(0);
+}
+
+.drawer-open-fromTop {
+    transform: translateY(0);
+}
+
+.drawer-open-fromRight {
+    transform: translateX(0);
+}
+
+.drawer-open-fromBottom {
     transform: translateY(0);
 }
 
@@ -25,18 +37,33 @@
 
 .drawer-close-fromBottom {
     transform: translateY(100%);
-} 
+}
 
-
-
-@media (max-width: 1024px) {
-    .drawer-close-fromLeft,
-    .drawer-close-fromRight {
-        transform: translateX(-100%);
+/* Media Queries for responsiveness */
+@media (max-width: 1200px) {
+    .drawer {
+        width: 80%;
+        max-width: 400px;
     }
+}
 
-    .drawer-close-fromTop,
-    .drawer-close-fromBottom {
-        transform: translateY(-100%);
+@media (max-width: 992px) {
+    .drawer {
+        width: 90%;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .drawer {
+        width: 95%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .drawer {
+        width: 100%;
+        max-width: 100%;
     }
 }

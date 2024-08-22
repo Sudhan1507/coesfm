@@ -1,4 +1,5 @@
 import db from '../../../config/db_config.js';
+
 export default class PermitToWorkDao{
 
     static async createPermitToWork({appId, ptId, flowId, checklistId, userId, activeStatus }){
@@ -82,11 +83,11 @@ export default class PermitToWorkDao{
             // Insert app_sign_off data
             await connection.execute(insertAppSignOffSql, [
             appId,
-            statusName || null,
-            signOffRemarks || null,
-            userId || null,
-            signature || null,
-            processedAt || null
+            statusName,
+            signOffRemarks,
+            userId,
+            signature,
+            processedAt
             ]);
     
             for (let response of responses) {

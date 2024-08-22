@@ -11,8 +11,9 @@
 }
 
 .container-body{
-    border-radius: 10px;
-    border: 1px solid;
+    border-radius: 5px;
+    border: .8px solid grey;
+    margin: 10px;
 }
 .container-body-nav {
     display: flex;

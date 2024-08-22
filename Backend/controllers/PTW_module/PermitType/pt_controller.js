@@ -3,17 +3,17 @@ import {validatePermitType,validateUpdatePermitType} from "../../../middlewares/
 import handleError from "../../../utils/pt_utils.js";
 
 export default class PermitTypeController{
-static async createPermitType(req,res){
-    try{
-     validatePermitType(req.body); 
-      const coneoller=    await PermitTypeService.createPermitTypeService(req.body);
-      console.log(coneoller);
-          res.status(201).json({status: 'success'});
-    }catch(err){
-        handleError(res,err);
-        res.json({status: 'failed'});
+    static async createPermitType(req, res) {
+        try {
+            validatePermitType(req.body);
+            const result = await PermitTypeService.createPermitTypeService(req.body);
+            res.status(201).json({ status: 'success'});
+        } catch (err) {
+            console.error('Error in createPermitType controller:', err);
+            handleError(res, err);
+            res.status(500).json({ status: 'failed', error: err.message });
+        }
     }
-}
 
 static async getPermitType(req,res){
     try{
