@@ -4,8 +4,8 @@ import DehazeIcon from '@mui/icons-material/Dehaze';
 import AnchorIcon from '@mui/icons-material/Anchor';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import BuildIcon from '@mui/icons-material/Build';
-import WorkIcon from '@mui/icons-material/Work'; 
+// import BuildIcon from '@mui/icons-material/Build';
+// import WorkIcon from '@mui/icons-material/Work'; 
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
@@ -49,16 +49,30 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                 {isDropdownOpen && (
                   <ul className='sidebar-contents-dropdown-list'>
                   <div className='sidebar-contents-master-dropdown-list-parts'>
-                  <li className='dropdown-item-parts' onClick={()=>{navigate('/parts')}}>
-                    <BuildIcon sx={{ color: 'white', verticalAlign: 'middle', fontSize: '1rem', marginLeft: '-0.5rem' }} />
-                    <span className='dropdown-item-parts-text'>Parts</span> 
-                    </li>
+                    {/* <BuildIcon sx={{ color: 'white', verticalAlign: 'middle', fontSize: '1rem', marginLeft: '-0.5rem' }} /> */}
+                    <span className='dropdown-item-parts-text' onClick={()=>{navigate('/parts')}}>Parts</span> 
                     </div>
                     <div className='sidebar-contents-master-dropdown-list-ptw'>
-                  <li className='dropdown-item-ptw' onClick={()=>{navigate('/permitToWork')}}>
-                    <WorkIcon sx={{ color: 'white', verticalAlign: 'middle', fontSize: '1rem', marginLeft: '-0.5rem' }}/>
-                    <span className='dropdown-item-ptw-text'>Permit To Work</span>
-                    </li>
+                    {/* <WorkIcon sx={{ color: 'white', verticalAlign: 'middle', fontSize: '1rem', marginLeft: '-0.5rem' }}/> */}
+                    <span className='dropdown-item-ptw-text' onClick={()=>{navigate('/permitToWork')}}>Permit To Work</span>
+                    </div>
+                    <div className='sidebar-contents-master-dropdown-list-meter'>
+                    <span className='dropdown-item-meter-text' onClick={()=>{navigate('/meter')}}>Meter</span>
+                    </div>
+                    <div className='sidebar-contents-master-dropdown-list-attendance'>
+                    <span className='dropdown-item-attendance-text' onClick={()=>{navigate('/display/attendance')}}>Attendance</span>
+                    </div>
+                    <div className='sidebar-contents-master-dropdown-list-school'>
+                    <span className='dropdown-item-school-text' onClick={()=>{navigate('/display/school')}}>School</span>
+                    </div>
+                    <div className='sidebar-contents-master-dropdown-list-report'>
+                    <span className='dropdown-item-report-text' onClick={()=>{navigate('/display/report')}}>Fault Report</span>
+                    </div>
+                    <div className='sidebar-contents-master-dropdown-list-booking'>
+                    <span className='dropdown-item-booking-text' onClick={()=>{navigate('/display/booking')}}>Booking Management</span>
+                    </div>
+                    <div className='sidebar-contents-master-dropdown-list-iaq'>
+                    <span className='dropdown-item-iaq-text' onClick={()=>{navigate('/display/iaq')}}>IAQ Transaction</span>
                     </div>
                 </ul>
               )}

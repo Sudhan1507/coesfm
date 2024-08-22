@@ -1,10 +1,9 @@
 import db from '../../../config/db_config.js';
-import PermitType from '../../../entities/PTW_module/PermitType/pt_entity.js';
 
 export default class PermitTypeDao{
 
-    static async createPermitTypeDao(permitType){
-        const sql='INSERT INTO m_permit_type (ptName,checklistId,flowId,reqId,remarks,active,createdby) VALUES(?,?,?,?,?,?,?)';
+    static async createPermitTypeDao(permitType) {
+        const sql = 'INSERT INTO m_permit_type (ptName, checklistId, flowId, reqId, remarks, active, createdby) VALUES (?, ?, ?, ?, ?, ?, ?)';
         const values = [
             permitType.ptName,
             permitType.checklistId,
@@ -14,14 +13,17 @@ export default class PermitTypeDao{
             permitType.active,
             permitType.createdBy
         ];
+
+
         try {
             const [result] = await db.execute(sql, values);
             return { ptId: result.insertId, ...permitType };
         } catch (err) {
-            console.error('Error executing SQL: ', err);
-            throw err;  // Re-throw the error after logging it
+            console.error('Error executing SQL:', err);
+            throw err; // Ensure errors are propagated
         }
     }
+    
     static async getPermitTypeDao(){
         const sql= `SELECT pt.ptId, pt.ptName,pt.checklistId, pt.flowId,pt.reqId, cl.cName AS checklistName, fl.flowName, req.reqName AS reqTag,
                pt.remarks, pt.createdOn, pt.createdBy, pt.updatedBy, pt.updatedOn, pt.active
@@ -31,7 +33,7 @@ export default class PermitTypeDao{
                LEFT JOIN m_req_tag req ON pt.reqId = req.reqId`;
         try {
             const [rows] = await db.execute(sql);
-            return rows.map(row => new PermitType(row));
+            return rows;
         } catch (err) {
             console.error('Error executing SQL: ', err);
             throw err;

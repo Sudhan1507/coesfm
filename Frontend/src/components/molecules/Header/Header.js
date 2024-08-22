@@ -19,7 +19,7 @@ const Header = ({ isSidebarOpen }) => {
 
   const handleSignOut = () => {
     sessionStorage.removeItem('userdata');
-    navigate('/login');
+    navigate('/');
   };
 
   if (!user) {

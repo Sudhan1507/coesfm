@@ -5,7 +5,6 @@ export default class ChecklistController{
  static async getChecklistNameController(req, res) {
     try {
         const checklistNames = await ChecklistService.getChecklistNameService();
-        // console.log('Controller - Sending checklist names:', checklistNames);  // Add this line for debugging
         res.json(checklistNames);
     } catch (err) {
         handleError(res, err);

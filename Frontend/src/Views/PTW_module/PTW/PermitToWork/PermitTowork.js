@@ -9,7 +9,6 @@ import SyncOutlinedIcon from '@mui/icons-material/SyncOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import '../PermitToWork/PermitToWork.css';
 import { useState, useCallback, useEffect } from "react";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import SignOffPermit from "../../../../components/organisms/Create/PTW_module/PermitToWorkFunctions/SignOff/SignOffPermit.js";
@@ -126,8 +125,9 @@ const PermitToWork = () => {
   const getActionCell = (row) => {
     const canEdit = !(row.appStatus === 'Completed' || row.appStatus === 'Canceled');
     const canView = isAdmin || row.userId === isAssignedUser;
+    
     return (
-      <div className='ptw-actions-icon'>
+      <div style={{"display": "flex","align-items": "center"}}>
         <Tooltip text='View' position='top'>
           <VisibilityOutlinedIcon style={{"cursor":"pointer"}} onClick={() =>{ 
              handleOpenDrawer('View', row)

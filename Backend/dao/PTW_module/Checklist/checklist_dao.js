@@ -5,7 +5,6 @@ export default class ChecklistDao {
         const sql = 'SELECT checklistId,cName FROM m_checklist;';
         try {
             const [rows] = await db.execute(sql);
-            // console.log('DAO - Fetched rows:', rows);  // Add this line for debugging
             return rows; 
         } catch (err) {
             console.error('Error executing SQL: ', err);

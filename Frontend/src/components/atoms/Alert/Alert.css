@@ -1,19 +1,21 @@
 .alert {
   position: fixed;
   top: 20px;
-  right: 20px; /* Adjusted for better initial positioning */
-  left: 20px;  /* Added to ensure the alert is within the screen width */
-  padding: 1rem 1.5rem;
+  left: 50%;
+   transform: translateX(-50%); /* Centers the alert horizontally */
+  padding: .5rem .5rem;
   border-radius: 0.5rem;
   color: white;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-start; /* Center align items inside the alert */
   justify-content: space-between;
-  max-width: 90vw; /* Ensuring it doesn't exceed viewport width */
+  max-width: 90vw; /* Ensure it doesn't exceed viewport width */
   box-sizing: border-box; /* Ensures padding is included within the width */
+  text-align: center; /* Center align text inside the alert */
 }
+
 
 .alert-content {
   display: flex;
@@ -37,7 +39,7 @@
 }
 
 .alert-loading {
-  width: 100%;
+  width: 20%;
   height: 0.3rem;
   background: rgba(255, 255, 255, 0.5);
   border-bottom-left-radius: 0.5rem;

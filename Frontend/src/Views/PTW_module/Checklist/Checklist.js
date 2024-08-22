@@ -64,7 +64,6 @@ const Checklist = ({ptId, permitTypeName, checklistId, checklistData, onSave }) 
 
       try {
         await axiosInstance.post('/ptw/addResponse', payload);
-        console.log('Options updated successfully');
         handleClear(); // Clear the form on successful save
         onSave(); // Call onSave after successful update
         navigate('/permitToWork', { 

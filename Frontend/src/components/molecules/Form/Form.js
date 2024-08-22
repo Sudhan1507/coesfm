@@ -101,7 +101,7 @@ const Form = ({
   return (
     <div className="form-group">
       <label>
-        {required && <span className="required">*</span>}
+        {/* {required && <span className="required">*</span>} */}
         {label}:
       </label>
       {renderInput()}

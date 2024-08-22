@@ -56,7 +56,6 @@ const SignOffPermit = ({ row, onClose }) => {
 
                 try {
                     const response = await axiosInstance.post(`/ptw/add/signOff/${row.appId}`, formdata);
-                    console.log('Sign Off Permit Submitted Successfully:', response.data);
                     handleCancel();
                 } catch (error) {
                     console.error('Error submitting sign off permit:', error);
@@ -75,7 +74,6 @@ const SignOffPermit = ({ row, onClose }) => {
 
             try {
                 const response = await axiosInstance.get(`/ptw/signOff/declaration/${row.appId}`);
-                console.log('response',response);
                 if (response.data.status === "success" && Array.isArray(response.data.data)) {
                     const declarationData = response.data.data.find(item => item.appId === row.appId);
                     if (declarationData) {

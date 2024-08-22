@@ -52,7 +52,6 @@ const Login = () => {
                 const response = await axios.post('http://localhost:8080/account/login', formData);
                 if (response.data.status === 'success' && response.data.data) {
                     sessionStorage.setItem('userdata',JSON.stringify( response.data.data));
-                    console.log('User logged in successfully:', response.data.data.token);
                     handleClear();
                     navigate('/dashboard');
                 }
@@ -81,18 +80,16 @@ const Login = () => {
                                 value={formFields.username}
                                 onChange={handleChange}
                                 error={error.username}
-                                required
                             />
                         </div>
                         <div className="login-form-group">
-                            <Form
+                            <Form 
                                 type="password"
                                 label='Password'
                                 name="password"
                                 value={formFields.password}
                                 onChange={handleChange}
                                 error={error.password}
-                                required
                             />
                         </div>
                         <div className="control-button">
