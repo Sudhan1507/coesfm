@@ -264,7 +264,7 @@ const Iaq = () => {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <label>Rows per page: </label>
+                        <label className='search-label'>Rows per page: </label>
                         <select
                             value={rowsPerPage}
                             onChange={handleRowsPerPageChange}

@@ -18,7 +18,6 @@ const Add_Report = () => {
     requestor_contact: "",
     description: "",
     image: '',
-    created_at: new Date().toISOString(),
   });
 
   const imageRef = useRef(null);
@@ -77,7 +76,6 @@ const Add_Report = () => {
     formData.append("requestor_contact", faultreport.requestor_contact);        
     formData.append("description", faultreport.description);
     formData.append("image", faultreport.image);
-    formData.append("created_at", faultreport.created_at);
 
     axiosInstance.post("/report/add_request", formData)
         .then((result) => {
