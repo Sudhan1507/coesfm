@@ -13,15 +13,15 @@ export default class PermitToWorkDao{
         }
     }
     static async getAllPermitToWork(){
-        const sql= `SELECT ptw.appId,ptw.appStatus, pt.ptName,fl.flowId ,fl.statusName, fl.stepNo, a.displayName, a.userId,a.emailId,
+        const sql= `SELECT ptw.appId,ptw.appStatus,ptw.email, pt.ptName,fl.flowId ,fl.statusName, fl.stepNo, a.displayName, a.userId,a.emailId,
                      DATE_FORMAT(ptw.updatedOn, '%d/%m/%Y %h:%i %p') AS updatedOn,
                      pr.createdBy, acc.displayName AS creatorName
                     FROM m_permit_to_work ptw
-                   JOIN m_permit_type pt ON ptw.ptId = pt.ptId 
-                   JOIN m_flow_details fl ON pt.flowId = fl.flowId AND ptw.current_step_no = fl.stepNo
-                   JOIN account a ON fl.userId = a.userId
-                   JOIN m_ptw_response pr ON ptw.appId=pr.appId
-                   JOIN account acc ON pr.createdBy = acc.userId
+					LEFT JOIN m_permit_type pt ON ptw.ptId = pt.ptId 
+                    LEFT JOIN m_flow_details fl ON pt.flowId = fl.flowId AND ptw.current_step_no = fl.stepNo
+                    LEFT JOIN account a ON fl.userId = a.userId
+                    LEFT JOIN m_ptw_response pr ON ptw.appId=pr.appId
+                    LEFT JOIN account acc ON pr.createdBy = acc.userId
                    ORDER BY ptw.appId`;
         try {
             const [rows] = await db.execute(sql);
@@ -59,35 +59,39 @@ export default class PermitToWorkDao{
     }
 
 
-    static async addMultipleChecklistResponses(ptId, activeStatus, createdBy, responses,statusName, signOffRemarks, userId, signature, processedAt) {
+    static async addMultipleChecklistResponses(ptId, activeStatus, createdBy, responses, statusName, signOffRemarks, userId, signature, processedAt) {
         const insertPTWSql = `INSERT INTO m_permit_to_work (ptId, activeStatus, createdBy)
-            VALUES (?, ?, ?)`;
-        const insertAppSignOffSql=`INSERT INTO app_sign_off (appId,statusName,signOff_remarks,userId,signature,processedAt) VALUES(?,?,?,?,?,?)`;
+                              VALUES (?, ?, ?)`;
+        const insertAppSignOffSql = `INSERT INTO app_sign_off (appId, statusName, signOff_remarks, userId, signature, processedAt)
+                                     VALUES (?, ?, ?, ?, ?, ?)`;
         const insertResponseSql = `INSERT INTO m_ptw_response (appId, serialNo, checkOptions, remarks, createdBy)
-            VALUES (?, ?, ?, ?, ?)`;
+                                   VALUES (?, ?, ?, ?, ?)`;
+    
         const connection = await db.getConnection();
     
         try {
             await connection.beginTransaction();
-            console.log('Inserting into m_permit_to_work:', ptId, activeStatus, createdBy);
+            // console.log('Inserting into m_permit_to_work:', ptId, activeStatus, createdBy, email);
     
-            // Validate inputs
+            // Validate that at least one of createdBy or email is provided
             if (!ptId || !activeStatus || !createdBy) {
-                throw new Error('ptId, activeStatus, and createdBy must be provided');
+                throw new Error('ptId, activeStatus createdBy must be provided');
             }
     
             // Insert permit-to-work data
             const [result] = await connection.execute(insertPTWSql, [ptId, activeStatus, createdBy]);
+            // console.log(result, 'first insert');
             const appId = result.insertId;
-
+            // console.log(appId, 'second insert');
+    
             // Insert app_sign_off data
             await connection.execute(insertAppSignOffSql, [
-            appId,
-            statusName,
-            signOffRemarks,
-            userId,
-            signature,
-            processedAt
+                appId,
+                statusName,
+                signOffRemarks || null,
+                userId || null,
+                signature || null,
+                processedAt || null,
             ]);
     
             for (let response of responses) {
@@ -98,9 +102,9 @@ export default class PermitToWorkDao{
                     throw new Error('serialNo and checkOptions must be provided for each response');
                 }
     
-                // Handle undefined values
+                // Handle undefined remarks
                 const remarksValue = remarks !== undefined ? remarks : null;
-                console.log('Inserting into m_ptw_response:', appId, serialNo, checkOptions, remarksValue, createdBy);
+                // console.log('Inserting into m_ptw_response:', appId, serialNo, checkOptions, remarksValue, createdBy, email);
                 await connection.execute(insertResponseSql, [appId, serialNo, checkOptions, remarksValue, createdBy]);
             }
     
@@ -112,8 +116,10 @@ export default class PermitToWorkDao{
         } finally {
             connection.release();
         }
-    }    
-    static async getSignOff(appId){
+    }
+    
+    
+        static async getSignOff(appId){
         const sql= `SELECT ptw.appId, fl.declaration 
                     FROM m_permit_to_work ptw 
                     JOIN 
@@ -244,13 +250,13 @@ export default class PermitToWorkDao{
         }
 
         static async getSignOffHistory(appId) {
-            const sql = `SELECT s.appId, s.statusName, s.signOff_remarks, a.displayName, s.signature,
+            const sql = `SELECT s.appId, s.statusName, s.signOff_remarks, a.displayName, s.signature,s.email,
                        DATE_FORMAT(s.processedAt, '%d/%m/%Y %h:%i %p') AS processedAt,
                        DATE_FORMAT(s.createdOn, '%d/%m/%Y %h:%i %p') AS createdOn
-                FROM app_sign_off s
-                JOIN account a ON s.userId = a.userId
-                WHERE s.appId = ?
-                ORDER BY s.processedAt DESC`;
+                       FROM app_sign_off s
+                       LEFT JOIN account a ON s.userId = a.userId
+                       WHERE s.appId = ?
+                       ORDER BY s.processedAt DESC`;
         
             try {
                 const [rows] = await db.execute(sql, [appId]);

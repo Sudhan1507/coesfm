@@ -4,12 +4,14 @@ import '../../PermitToWorkFunctions/SignOffHistory/SignOffHistory.css';
 
 const SignOffHistory = ({ row }) => {
     const [data, setData] = useState([]);
-    const [appId,setAppId]=useState(null);
-    const [createdon,setCreatedOn] = useState(null);
+    const [appId, setAppId] = useState(null);
+    const [createdOn, setCreatedOn] = useState(null);
 
     const headers = [
         { key: 'statusName', label: 'Status' },
-        { key: 'displayName', label: 'Processed by' },
+        data.length > 0 && data[0].email ? 
+            { key: 'email', label: 'Processed by' } : 
+            { key: 'displayName', label: 'Processed by' },
         { key: 'processedAt', label: 'Processed at' },
         { key: 'signOff_remarks', label: 'Remarks' },
         {
@@ -17,7 +19,6 @@ const SignOffHistory = ({ row }) => {
             label: 'Signature',
             render: (value) => {
                 if (value) {
-                    // Check if the value starts with the correct data URI prefix
                     const isValidBase64 = value.startsWith('data:image/png;base64,');
                     return isValidBase64 ? (
                         <img src={value} alt="Signature" style={{ width: '100px', height: 'auto' }} />
@@ -75,23 +76,21 @@ const SignOffHistory = ({ row }) => {
     };
 
     return (
-        <>
         <div className="signoff-history-container">
             <div className="signoff-history-header">
-            <div className="signoff-history-appid">
-             <span className="signoff-history-appid-text">Application ID:</span> 
-              <span className="signoff-history-appid-value">{appId}</span>
-            </div>
-            <div className="signoff-history-createdon">
-                <span className="signoff-history-createdon-text">Created At:</span>
-                <span className="signoff-history-createdon-value">{createdon}</span>
-            </div>
+                <div className="signoff-history-appid">
+                    <span className="signoff-history-appid-text">Application ID:</span> 
+                    <span className="signoff-history-appid-value">{appId}</span>
+                </div>
+                <div className="signoff-history-createdon">
+                    <span className="signoff-history-createdon-text">Created At:</span>
+                    <span className="signoff-history-createdon-value">{createdOn}</span>
+                </div>
             </div>
             <div className="signoff-history-table">
-            <Table data={data} headers={headers} />
+                <Table data={data} headers={headers} />
             </div>
-            </div>
-        </>
+        </div>
     );
 };
 

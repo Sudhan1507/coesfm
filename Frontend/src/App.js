@@ -33,12 +33,18 @@ import Edit_Booking from "./Views/Booking Management/Edit_booking.jsx";
 import CheckAvailability from "./Views/Booking Management/CheckAvailability.jsx";
 import Iaq from "./Views/IAQ/Iaq.jsx";
 import './Main.css';
+import ChecklistForm from "./Views/PTW_module/PTW/Checklist/ChecklistPage/ChecklistForm.js";
+import SuccessFormSubmit from "./Views/PTW_module/PTW/SuccessForm/SuccessFormSubmit.js";
+
 
 const App = () => {
   return (
   <>
   <Router>
     <Routes>
+      <Route path="/complete_permit_to_work/:email/:ptid/:token" element={<ChecklistForm/>} />
+      <Route path="/success" element={<SuccessFormSubmit/>}/>
+
       <Route element={<PrivateRoutes/>}>
         <Route path="/dashboard" element={<Layout/>}/>
         <Route path="/parts" element={<Parts/>}/>
@@ -47,6 +53,7 @@ const App = () => {
         <Route path="/approvalFlow" element={<ApprovalFlow/>}/>
         <Route path="/updateFlow" element={<UpdateFlow/>}/>
         <Route path="/newPermitApp" element={<NewPermitApp/>}/>
+        <Route path="/success" element={<SuccessFormSubmit/>}/>
 
 
         <Route path='/meter' element={<Meter/>}></Route>

@@ -28,13 +28,15 @@ export default class PermitToWorkService{
     }
     static async addMultipleChecklistResponsesService(payload) {
         try {
-            const { ptId, activeStatus, createdBy, responses,statusName, signOffRemarks, userId, signature, processedAt } = payload;
-            await PermitToWorkDao.addMultipleChecklistResponses(ptId, activeStatus, createdBy, responses,statusName, signOffRemarks, userId, signature, processedAt);
+            const { ptId, activeStatus, createdBy, responses, statusName, signOffRemarks, userId, signature, processedAt } = payload;
+            await PermitToWorkDao.addMultipleChecklistResponses(ptId, activeStatus, createdBy, responses, statusName, signOffRemarks, userId, signature, processedAt);
             console.log('{ status: Update multiple checklist options service: success }');
         } catch (err) {
             console.error('Error in addMultipleChecklistResponsesService: ', err);
+            throw err;
         }
     }
+    
 
     static async getSignOffService(appId){
         try{

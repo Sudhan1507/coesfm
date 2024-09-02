@@ -16,6 +16,9 @@ import FaultReportRoutes from './routes/Fault_Report_module/FaultReport/Fault_Re
 import MeterRoutes from './routes/Meter_module/Meter/MeterRouter.js';
 import MeterreadingRoutes from './routes/Meter_module/MeterReading/ReadingRouter.js';
 import SchoolRoutes from './routes/School_module/School/school_routes.js';
+import EmailRoutes from './routes/PTW_module/E-mail/email_routes.js';
+import PermitToWorkEmailRoutes from './routes/PTW_module/PermitToWork/ptwEmail_routes.js';
+
 
 dotenv.config({path:'./app.env'});
 
@@ -46,6 +49,9 @@ app.use('/meter', MeterRoutes);
 app.use('/attendance',AttendanceRoutes);
 app.use('/report',FaultReportRoutes);
 app.use('/reading',MeterreadingRoutes);
+app.use('/api/email', EmailRoutes);
+app.use('/api/ptw',PermitToWorkEmailRoutes);
+
 
 
 // Error handling middleware

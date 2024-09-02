@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Form from '../../../components/molecules/Form/Form.js';
-import FormFooter from "../../../components/atoms/FormFooter/FormFooter.js";
 import { useNavigate } from 'react-router-dom';
 import './Checklist.css';
-import axiosInstance from '../../../services/service.js';
-import { getUserData } from '../../../utils/utils.js';
-
+import Form from '../../../../../components/molecules/Form/Form.js';
+import FormFooter from '../../../../../components/atoms/FormFooter/FormFooter.js';
+import axiosInstance from '../../../../../services/service';
+import { getUserData } from '../../../../../utils/utils.js';
 
 const Checklist = ({ptId, permitTypeName, checklistId, checklistData, onSave }) => {
   const userdata = getUserData();

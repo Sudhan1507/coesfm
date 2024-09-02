@@ -40,15 +40,18 @@ export default class PermitToWorkController{
     static async addChecklistResponseController(req, res) {
         const payload = req.body;
     
-            // Validate payload structure
-            if (!payload.ptId || !payload.activeStatus || !payload.createdBy || !Array.isArray(payload.responses)) {
-                return res.status(400).json({ status: 'invalid request', message: 'Invalid payload structure' });
-            }
+        console.log(payload);
     
-            // Ensure each response object has the necessary properties
-            if (payload.responses.some(response => response.serialNo === undefined || response.checkOptions === undefined)) {
-                return res.status(400).json({ status: 'invalid request', message: 'Each response must include serialNo and checkOptions' });
-            }
+        // Validate payload structure
+        if (!payload.ptId || !payload.activeStatus || !payload.createdBy || !Array.isArray(payload.responses)) {
+            return res.status(400).json({ status: 'invalid request', message: 'Invalid payload structure' });
+        }
+    
+        // Ensure each response object has the necessary properties
+        if (payload.responses.some(response => response.serialNo === undefined || response.checkOptions === undefined)) {
+            return res.status(400).json({ status: 'invalid request', message: 'Each response must include serialNo and checkOptions' });
+        }
+    
         try {
             await PermitToWorkService.addMultipleChecklistResponsesService(payload);
             return res.status(200).json({ status: 'success' });
@@ -63,6 +66,7 @@ export default class PermitToWorkController{
             return res.status(500).json({ status: 'failed', message: 'Internal server error' });
         }
     }
+    
 
     static async getSignOffController(req,res){
         const {appId}=req.params;
