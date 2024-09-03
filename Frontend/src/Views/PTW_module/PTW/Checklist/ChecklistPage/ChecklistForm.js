@@ -1,30 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../../../../../components/atoms/Button/Button.js';
-import Form from '../../../../../components/molecules/Form/Form.js';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Form from '../../../../../components/molecules/Form/Form';
+import Button from '../../../../../components/atoms/Button/Button';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import Alert from '../../../../../components/atoms/Alert/Alert';
 
 const ChecklistForm = () => {
-  const { email, ptid } = useParams();
+  const { email, ptid, token } = useParams();  // Extract token from URL
   const navigate = useNavigate();
   const decryptedEmail = atob(email); // Decrypt the base64 encoded email
   const ptId = atob(ptid);
+
   const [data, setData] = useState([]);
   const [remarks, setRemarks] = useState('');
   const [errors, setErrors] = useState({});
   const [permitTypeName, setPermitTypeName] = useState("");
   const [checklistId, setChecklistId] = useState(0);
   const [isRemarksValid, setIsRemarksValid] = useState(true);
+  const [showAlert, setShowAlert] = useState({
+    show: false,
+    type: '',
+    message: '',
+    duration: 3000,
+    icon: null,
+  });
+
+  
 
   const getPermitTypeData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/ptw/permitType/${ptId}`);
+      const res = await axios.get(`http://localhost:8080/api/ptw/permitType/${ptId}/${token}`);
       if (res.data.status === "success" && Array.isArray(res.data.data)) {
         setData(res.data.data);
         setPermitTypeName(res.data.data[0].ptName);
         setChecklistId(res.data.data[0].checklistId);
       } else {
+        if(res.data.status === "Invalid"){
+          showAlertHandler({
+            type: 'error',
+            message: 'This checklist has already been submitted.',
+            duration: 3000,
+            icon: <ErrorOutlineOutlinedIcon />
+          });
+          
         setData([]);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -65,6 +86,7 @@ const ChecklistForm = () => {
       }));
 
       const payload = {
+        token,  // Use the token in the payload
         ptId,
         activeStatus: '1',
         email: decryptedEmail,
@@ -89,6 +111,26 @@ const ChecklistForm = () => {
     setRemarks('');
     setErrors({});
     setIsRemarksValid(true);
+  };
+
+   // Function to show an alert
+   const showAlertHandler = ({ type, message, duration, icon }) => {
+    setShowAlert({
+      show: true,
+      type,
+      message,
+      duration,
+      icon
+    });
+    setTimeout(() => {
+      setShowAlert({
+        show: false,
+        type: '',
+        message: '',
+        duration: 3000,
+        icon: null,
+      });
+    }, duration);
   };
 
   return (
@@ -171,6 +213,10 @@ const ChecklistForm = () => {
           </div>
         </form>
       </div>
+
+      {showAlert.show && (
+        <Alert type={showAlert.type} message={showAlert.message} duration={showAlert.duration} icon={showAlert.icon} />
+      )}   
     </>
   );
 };

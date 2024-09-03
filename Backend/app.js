@@ -2,10 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import PermitTypeRoutes from './routes/PTW_module/PermitType/pt_routes.js';
-import ChecklistRoutes from './routes/PTW_module//Checklist/checklist_routes.js';
-import RequestorRoutes from './routes/PTW_module//Requestor/requestor_routes.js';
-import FlowRoutes from './routes/PTW_module//Flow/flow_routes.js';
-import AccountRoutes from './routes/PTW_module//Account/account_routes.js';
+import ChecklistRoutes from './routes/PTW_module/Checklist/checklist_routes.js';
+import RequestorRoutes from './routes/PTW_module/Requestor/requestor_routes.js';
+import FlowRoutes from './routes/PTW_module/Flow/flow_routes.js';
+import AccountRoutes from './routes/PTW_module/Account/account_routes.js';
 import PtwRoutes from './routes/PTW_module/PermitToWork/ptw_routes.js';
 import PartsRoutes from './routes/Parts_module/Parts/parts_routes.js';
 import IAQRoutes from './routes/IAQ_module/IAQ_Transaction/IaqRouter.js'

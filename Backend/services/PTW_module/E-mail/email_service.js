@@ -5,18 +5,12 @@ export default class EmailService {
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: process.env.EMAIL_PORT,
-            // secure: process.env.EMAIL_SECURE, 
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
             }
         });
 
-        console.log('host: ' + process.env.EMAIL_HOST);
-        console.log('port: ' + process.env.EMAIL_PORT);
-        // console.log('secure: ' + process.env.EMAIL_SECURE);
-        console.log('user: ' + process.env.EMAIL_USER);
-        console.log('pass: ' + process.env.EMAIL_PASS);
 
         const mailOptions = {
             from: process.env.EMAIL_USER,

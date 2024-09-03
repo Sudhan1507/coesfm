@@ -1,10 +1,23 @@
 import PermitToWorkEmailService from "../../../services/PTW_module/PermitToWork/ptwEmail_service.js";
+import db from '../../../config/db_config.js';
 
 export default class PermitToWorkEmailController{
 
     static async getPermitToWorkByIdController(req,res){
         try{
-        const {ptId}= req.params;
+        const {ptId,token}= req.params;
+       
+        //Validate the token
+        const [rows] = await db.query(
+            'SELECT used FROM checklist_token WHERE token=?',[token]
+        );
+
+
+        // Check if the token was found and if it is used
+        if (rows[0].used === 1) {
+            return res.status(400).json({ status: 'Invalid' });
+        }
+
         const permitToWork= await PermitToWorkEmailService.getPermitTypeByIdService(ptId);
         if(!permitToWork) return res.status(404).json({ status: 'not found' });
         return res.status(200).json({ status: 'success', data: permitToWork });
@@ -15,9 +28,17 @@ export default class PermitToWorkEmailController{
     };
 
     static async addChecklistResponseController(req, res) {
-        const payload = req.body;
-    
-        console.log(payload);
+        const payload = req.body;        
+
+        // Validate the token
+        const [rows] = await db.query(
+            'SELECT * FROM checklist_token WHERE token = ? AND used = false AND expiration > NOW()',
+            [payload.token]
+        );
+
+        if (rows.length === 0) {
+            return res.status(400).json({ message: 'Invalid, expired, or already used token' });
+        }
     
         // Validate payload structure
         if (!payload.ptId || !payload.activeStatus || !payload.email || !Array.isArray(payload.responses)) {

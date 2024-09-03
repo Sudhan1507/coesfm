@@ -55,7 +55,7 @@ const SignOffPermit = ({ row, onClose }) => {
             };
 
                 try {
-                    const response = await axiosInstance.post(`/ptw/add/signOff/${row.appId}`, formdata);
+                    await axiosInstance.post(`/ptw/add/signOff/${row.appId}`, formdata);
                     handleCancel();
                 } catch (error) {
                     console.error('Error submitting sign off permit:', error);

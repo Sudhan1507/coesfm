@@ -2,11 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import "./ViewChecklist.css";
 import Form from "../../../../../molecules/Form/Form";
 import axiosInstance from "../../../../../../services/service";
-import { getUserData } from "../../../../../../utils/utils";
-import FormFooter from "../../../../../atoms/FormFooter/FormFooter";
 
-const ViewChecklist = ({ row, onClose }) => {
-    const userdata = getUserData();
+const ViewChecklist = ({ row }) => {
     const [data, setData] = useState([]);
     const [fields, setFields] = useState({});
     const [remarks, setRemarks] = useState("");

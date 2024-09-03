@@ -8,7 +8,6 @@ static async getPermitTypeById(ptId) {
                  LEFT JOIN m_checklist_details d ON d.checklistId = pt.checklistId
                  WHERE pt.ptId = ?
                  ORDER BY serialNo`;
-
     try{
         const [result] = await db.execute(sql,[ptId]);
         return result;
@@ -18,13 +17,14 @@ static async getPermitTypeById(ptId) {
         }
     }
 
-    static async addMultipleChecklistResponses(ptId, activeStatus, email, responses, statusName, signOffRemarks, signature, processedAt) {
+    static async addMultipleChecklistResponses(token,ptId, activeStatus, email, responses, statusName, signOffRemarks, signature, processedAt) {
         const insertPTWSql = `INSERT INTO m_permit_to_work (ptId, activeStatus, email)
                               VALUES (?, ?, ?)`;
         const insertAppSignOffSql = `INSERT INTO app_sign_off (appId, statusName, signOff_remarks, signature, processedAt, email)
                                      VALUES (?, ?, ?, ?, ?, ?)`;
         const insertResponseSql = `INSERT INTO m_ptw_response (appId, serialNo, checkOptions, remarks, email)
                                    VALUES (?, ?, ?, ?, ?)`;
+        const updateChecklistTokenSql =`UPDATE checklist_token SET used = true WHERE token = ?`;
     
         const connection = await db.getConnection();
     
@@ -65,6 +65,9 @@ static async getPermitTypeById(ptId) {
                 const remarksValue = remarks !== undefined ? remarks : null;
                 // console.log('Inserting into m_ptw_response:', appId, serialNo, checkOptions, remarksValue, createdBy, email);
                 await connection.execute(insertResponseSql, [appId, serialNo, checkOptions, remarksValue, email]);
+
+                // Mark the token as used
+                await db.query(updateChecklistTokenSql, [token]);
             }
     
             await connection.commit();

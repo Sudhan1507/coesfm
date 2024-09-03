@@ -12,8 +12,8 @@ export default class PermitToWorkEmailService{
 
     static async addMultipleChecklistResponsesService(payload) {
         try {
-            const { ptId, activeStatus, email, responses, statusName, signOffRemarks, userId, signature, processedAt } = payload;
-            await PermitToWorkEmailDao.addMultipleChecklistResponses(ptId, activeStatus, email, responses, statusName, signOffRemarks, userId, signature, processedAt);
+            const {token, ptId, activeStatus, email, responses, statusName, signOffRemarks, signature, processedAt } = payload;
+            await PermitToWorkEmailDao.addMultipleChecklistResponses(token,ptId, activeStatus, email, responses, statusName, signOffRemarks, signature, processedAt);
             console.log('{ status: Update multiple checklist options service: success }');
         } catch (err) {
             console.error('Error in addMultipleChecklistResponsesService: ', err);

@@ -3,7 +3,7 @@ import PermitToWorkEmailController from '../../../controllers/PTW_module/PermitT
 
 const router= Router();
 
-router.get('/permitType/:ptId', PermitToWorkEmailController.getPermitToWorkByIdController);
+router.get('/permitType/:ptId/:token', PermitToWorkEmailController.getPermitToWorkByIdController);
 router.post('/addResponse', PermitToWorkEmailController.addChecklistResponseController);
 
 

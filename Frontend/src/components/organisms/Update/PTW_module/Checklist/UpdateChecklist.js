@@ -12,6 +12,7 @@ const UpdateChecklist = ({ row, showAlert, onClose }) => {
     const [data, setData] = useState([]);
     const [fields, setFields] = useState({});
     const [remarks, setRemarks] = useState("");
+    const [isRemarksValid, setIsRemarksValid] = useState(true);
     const [errors, setErrors] = useState({});
 
     const getChecklistData = useCallback(async () => {
@@ -54,10 +55,23 @@ const UpdateChecklist = ({ row, showAlert, onClose }) => {
     };
 
     const handleRemarksChange = (e) => {
-        setRemarks(e.target.value);
-    };
+        const value = e.target.value;
+        setRemarks(value);
+        setIsRemarksValid(value.trim() !== '');
+        if (!value.trim()) {
+          setErrors(prevErrors => ({ ...prevErrors, remarks: 'Remarks are required' }));
+        } else {
+          setErrors(prevErrors => {
+            const { remarks, ...rest } = prevErrors;
+            return rest;
+          });
+        }
+      };
 
     const handleFormSubmit = async () => {
+        
+    // Validate remarks
+    if (isRemarksValid) {
         const payload = data.map((item) => ({
             appId: item.appId,
             checklistId: item.checklistId,
@@ -103,6 +117,9 @@ const UpdateChecklist = ({ row, showAlert, onClose }) => {
             });
             console.error('Error updating checklist:', error);
         }
+    }else {
+        setErrors({ remarks: 'Remarks are required' });
+      }
     };
 
     return (
