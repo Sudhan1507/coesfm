@@ -1,5 +1,16 @@
 import PermitToWorkService from "../../../services/PTW_module/PermitToWork/ptw_service.js";
 import handleError from "../../../utils/pt_utils.js";
+import EmailService from "../../../services/PTW_module/E-mail/email_service.js";
+
+// Function to generate a token
+function generateToken() {
+    return crypto.randomBytes(32).toString('hex');
+}
+
+// Helper function for base64 encoding in Node.js
+function toBase64(str) {
+    return Buffer.from(str).toString('base64');
+}
 
 export default class PermitToWorkController{
     static async getAllPermitToWorkController(req,res){
@@ -144,13 +155,18 @@ export default class PermitToWorkController{
 
     static async updateAssignmentController(req, res) {
         const { userId, updatedBy } = req.body;
+
             const { flowId, stepNo } = req.params;
+
             if (!userId || !flowId || !stepNo) {
                 return res.status(404).json({ status: 'User Id, Flow Id or Step No not found' });
             }
         try {
+
             await PermitToWorkService.updateAssignmentService(flowId, stepNo, userId, updatedBy);
+
             return res.status(200).json({ status: 'success' });
+
         } catch (err) {
             console.error('Error in updateAssignmentController: ', err);
             return res.status(500).json({ status: 'failed' });
@@ -174,13 +190,24 @@ export default class PermitToWorkController{
     }
 
     static async restartAppFlowController(req, res) {
-        const { appId, statusName, userId, signOffRemarks } = req.body;
-        if (!appId || !statusName || !userId || !signOffRemarks) {
-            return res.status(400).json({ status: 'Application Id, Status Name, User Id or Sign-off Remarks not found' });
+        const { appId, statusName, userId, signOffRemarks,username } = req.body;
+        if (!appId || !statusName || !userId || !signOffRemarks || !username) {
+            return res.status(400).json({ status: 'Application Id, Status Name, User Id, username or Sign-off Remarks not found' });
         }
         try {
             const result = await PermitToWorkService.restartAppFlowService(appId, statusName, userId, signOffRemarks);
-            res.status(200).json(result);
+            const subject =`Permit to Work PTW${appId}: Change requested`;
+
+            const mailContent =`<p><h1>${username} has requested a change in the Permit to Work Application</h1></p>
+                       <ul>
+                       <li> <p>Permit to Work ID: PTW${appId}</p></li>
+                       <li> <p>Remarks: ${signOffRemarks}</p></li>
+                       </ul>
+                        <p><a href="${link}" target="_blank">Link to resubmit Application</a></p>
+                       <p><strong> This is an automated notification email. Please do not reply to this email.</strong></p>`;
+    
+          const response=  await EmailService.sendNotification(payload.email,subject,mailContent)
+           return res.status(200).json(result);
         } catch (err) {
             res.status(500).json({ status: 'failed', message: 'Failed to restart application flow.', error: err.message });
         }

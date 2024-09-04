@@ -26,7 +26,8 @@ const RequestChange = ({ row, showAlert, onClose }) => {
             statusName: 'Change Requested',
             userId: userdata.user.userId,
             signOffRemarks: signOffRemarks,
-            updatedBy: userdata.user.userId
+            updatedBy: userdata.user.userId,
+            username: userdata.user.displayName,
         };
 
         try {

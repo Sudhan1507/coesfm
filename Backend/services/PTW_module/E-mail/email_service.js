@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 export default class EmailService {
-   static async sendNotification(email, htmlContent) {
+   static async sendNotification(email,subject, mailContent) {
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: process.env.EMAIL_PORT,
@@ -15,8 +15,8 @@ export default class EmailService {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Permit to Work Application',
-            html: htmlContent
+            subject: subject,
+            html: mailContent 
         };
 
         try {

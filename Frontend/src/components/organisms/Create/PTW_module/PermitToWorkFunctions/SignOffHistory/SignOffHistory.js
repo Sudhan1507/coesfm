@@ -7,11 +7,12 @@ const SignOffHistory = ({ row }) => {
     const [appId, setAppId] = useState(null);
     const [createdOn, setCreatedOn] = useState(null);
 
+    console.log(data);
+
+
     const headers = [
         { key: 'statusName', label: 'Status' },
-        data.length > 0 && data[0].email ? 
-            { key: 'email', label: 'Processed by' } : 
-            { key: 'displayName', label: 'Processed by' },
+        { key: 'displayName', label: 'Processed by' },
         { key: 'processedAt', label: 'Processed at' },
         { key: 'signOff_remarks', label: 'Remarks' },
         {
@@ -65,6 +66,7 @@ const SignOffHistory = ({ row }) => {
                         <tr key={rowIndex}>
                             {headers.map(header => (
                                 <td key={header.key}>
+        
                                     {header.render ? header.render(row[header.key]) : row[header.key]}
                                 </td>
                             ))}

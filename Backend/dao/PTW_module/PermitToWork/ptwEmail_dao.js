@@ -71,6 +71,7 @@ static async getPermitTypeById(ptId) {
             }
     
             await connection.commit();
+            return appId;
         } catch (error) {
             await connection.rollback();
             console.error('Error executing SQL for multiple responses: ', error);
@@ -79,6 +80,5 @@ static async getPermitTypeById(ptId) {
             connection.release();
         }
     }
-
 
 };
