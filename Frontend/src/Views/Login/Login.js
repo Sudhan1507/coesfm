@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Button from "../../components/atoms/Button/Button";
 import Form from "../../components/molecules/Form/Form";
-import axios from "axios";
 // import CryptoJS from 'crypto-js'; 
 import "../Login/Login.css";
 import { useNavigate } from "react-router-dom";
+import axios  from "axios";
 
 const Login = () => {
     const navigate = useNavigate();

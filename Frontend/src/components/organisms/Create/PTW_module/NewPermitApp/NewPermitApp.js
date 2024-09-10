@@ -16,6 +16,8 @@ const NewPermitApp = () => {
   const [checklistId, setChecklistId] = useState(0);
   const [email, setEmail] = useState("");
   const [isEmailVisible, setIsEmailVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // Track loading state
+
   const [showAlert, setShowAlert] = useState({
     show: false,
     type: "",
@@ -30,6 +32,7 @@ const NewPermitApp = () => {
     email: "",
   });
 
+
   const handlePermitTypeChange = async (e) => {
     const selectedPermitType = e.target.value;
     setPermitType(selectedPermitType);
@@ -42,6 +45,7 @@ const NewPermitApp = () => {
       setChecklistId(selectedOption.id);
       setIsEmailVisible(true);
       setErrors({ ...errors, permitType: "" });
+      setLoading(true); // Start loading when fetching data
 
       try {
         const res = await axiosInstance.get(
@@ -67,6 +71,9 @@ const NewPermitApp = () => {
           icon: <ErrorOutlineOutlinedIcon />,
         });
       }
+      finally {
+        setLoading(false); // Stop loading after data is fetched
+      }
     }
   };
 
@@ -75,12 +82,15 @@ const NewPermitApp = () => {
     setErrors({ ...errors, email: "" });
   };
 
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const getPermitTypeName = useCallback(async () => {
+    setLoading(true); // Start loading while fetching permit types
+
     try {
       const res = await axiosInstance.get(`/ptw/permitTypeName`);
       if (res.data.status === "success" && Array.isArray(res.data.data)) {
@@ -108,6 +118,8 @@ const NewPermitApp = () => {
         duration: 3000,
         icon: <ErrorOutlineOutlinedIcon />,
       });
+    }finally {
+      setLoading(false); // Stop loading after data is fetched
     }
   }, []);
 
@@ -148,6 +160,8 @@ const NewPermitApp = () => {
         permitType: permitType,
         username: userdata.user.displayName 
       };
+      setLoading(true); // Start loading when sending email
+
       try {
         const response = await axiosInstance.post(
           `/api/email/send-notification`,
@@ -177,6 +191,8 @@ const NewPermitApp = () => {
           duration: 3000,
           icon: <ErrorOutlineOutlinedIcon />,
         });
+      }finally {
+        setLoading(false); // Stop loading after email is sent
       }
     } else {
       setErrors({ ...errors, email: "Invalid email address" });
@@ -208,9 +224,8 @@ const NewPermitApp = () => {
                   required={true}
                 />
               </div>
+              {isEmailVisible && (
               <div className="container-body-newpta-email">
-                {isEmailVisible && (
-                  <>
                     <div className="container-body-newpta-email-form">
                       <Form
                         label="Email"
@@ -230,10 +245,10 @@ const NewPermitApp = () => {
                         onClick={handleSendEmail}
                       />
                     </div>
-                  </>
+                    </div>
                 )}
               </div>
-            </div>
+
           </div>
           {showAlert.show && (
                 <div className={`alert ${showAlert.type}`}>
@@ -241,7 +256,7 @@ const NewPermitApp = () => {
                     {showAlert.message}
                 </div>
             )}
-          {permitType && (
+          {permitType && !loading && (
             <Checklist
               ptId={permitType}
               permitTypeName={permitTypeName}

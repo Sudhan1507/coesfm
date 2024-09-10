@@ -13,7 +13,7 @@ export default class PermitToWorkDao{
         }
     }
     static async getAllPermitToWork(){
-        const sql= `SELECT ptw.appId,ptw.appStatus,ptw.email, pt.ptName,fl.flowId ,fl.statusName, fl.stepNo, a.displayName, a.userId,a.emailId,
+        const sql= `SELECT ptw.appId,ptw.appStatus,ptw.email,pt.ptId, pt.ptName,fl.flowId,pt.checklistId ,fl.statusName, fl.stepNo, a.displayName, a.userId,a.emailId,
                      DATE_FORMAT(ptw.updatedOn, '%d/%m/%Y %h:%i %p') AS updatedOn,
                      pr.createdBy, acc.displayName AS creatorName
                     FROM m_permit_to_work ptw
@@ -31,6 +31,18 @@ export default class PermitToWorkDao{
             throw err;
         }
     }
+    
+    static async getPermitToWorkById(appId){
+        const sql = `SELECT * FROM m_permit_to_work WHERE appId =?`;
+        try{
+            const [rows] = await db.execute(sql,[appId]);
+            return rows;
+        }catch(err){
+            console.error('Error executing SQL: ', err);
+            throw err;
+        }
+    }
+
     static async getPermitTypeById(ptId) {
         const sql = `SELECT pt.ptId,pt.ptName, d.checklistId, d.serialNo, d.description
                      FROM m_permit_type pt
@@ -62,8 +74,8 @@ export default class PermitToWorkDao{
     static async addMultipleChecklistResponses(ptId, activeStatus, createdBy, responses, statusName, signOffRemarks, userId, signature, processedAt) {
         const insertPTWSql = `INSERT INTO m_permit_to_work (ptId, activeStatus, createdBy)
                               VALUES (?, ?, ?)`;
-        const insertAppSignOffSql = `INSERT INTO app_sign_off (appId, statusName, signOff_remarks, userId, signature, processedAt)
-                                     VALUES (?, ?, ?, ?, ?, ?)`;
+        const insertAppSignOffSql = `INSERT INTO app_sign_off (appId, statusName, signOff_remarks, userId, signature)
+                                     VALUES (?, ?, ?, ?, ?)`;
         const insertResponseSql = `INSERT INTO m_ptw_response (appId, serialNo, checkOptions, remarks, createdBy)
                                    VALUES (?, ?, ?, ?, ?)`;
     
@@ -90,8 +102,7 @@ export default class PermitToWorkDao{
                 statusName,
                 signOffRemarks || null,
                 userId || null,
-                signature || null,
-                processedAt || null,
+                signature || null
             ]);
     
             for (let response of responses) {
@@ -207,7 +218,7 @@ export default class PermitToWorkDao{
         }
     
         // Execute the update query
-        await db.execute(updateSql, [appId]);
+      const response= await db.execute(updateSql, [appId]);
     
         // Insert into app_sign_off
         const insertSignOffSql = `
@@ -250,7 +261,7 @@ export default class PermitToWorkDao{
         }
 
         static async getSignOffHistory(appId) {
-            const sql = `SELECT s.appId, s.statusName, s.signOff_remarks, a.displayName, s.signature,s.email,
+            const sql = `SELECT s.appId, s.statusName, s.signOff_remarks, IFNULL(a.displayName,s.email) AS displayName, s.signature,
                        DATE_FORMAT(s.processedAt, '%d/%m/%Y %h:%i %p') AS processedAt,
                        DATE_FORMAT(s.createdOn, '%d/%m/%Y %h:%i %p') AS createdOn
                        FROM app_sign_off s
@@ -298,7 +309,7 @@ export default class PermitToWorkDao{
                 console.error('Error updating permit status: ', err);
                 throw err;
             }
-        }
+        };
     
         static async insertAppSignOff(appId, statusName, userId) {
             const insertSignOffSql = `
@@ -312,7 +323,7 @@ export default class PermitToWorkDao{
                 console.error('Error inserting sign off: ', err);
                 throw err;
             }
-        } 
+        };
 
         static async requestChange(appId, statusName, userId, signOffRemarks) {
             const signOffSql = `INSERT INTO app_sign_off (appId, statusName, userId, signOff_remarks, processedAt)
@@ -324,7 +335,7 @@ export default class PermitToWorkDao{
                 console.error('Error requesting change: ', err);
                 throw err;
             }
-        }
+        };
     
         static async restartAppFlow(appId) {
             const updateAppFlow = `UPDATE m_permit_to_work SET current_step_no = 1, appStatus='Change Requested' WHERE appId = ?`;
@@ -335,7 +346,7 @@ export default class PermitToWorkDao{
                 console.error('Error restarting application flow: ', err);
                 throw err;
             }
-        }
+        };
 
         static async updateChecklistResponse(appId, serialNo, checkOptions, remarks, updatedBy) {
             const checklistResponseSql = `UPDATE m_ptw_response SET checkOptions=?, remarks=?, updatedBy=? WHERE appId=? AND serialNo=?`;
@@ -346,7 +357,8 @@ export default class PermitToWorkDao{
                 console.error('Error updating checklist response: ', err);
                 throw err;
             }
-        }
+        };
+        
         static async updateAppStatus(appId, appStatus, updatedBy) {
             const updateAppStatusSql = `UPDATE m_permit_to_work SET appStatus=?, updatedBy=? WHERE appId=?`;
             try {

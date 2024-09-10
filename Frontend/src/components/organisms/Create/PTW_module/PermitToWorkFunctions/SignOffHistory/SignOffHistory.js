@@ -7,8 +7,6 @@ const SignOffHistory = ({ row }) => {
     const [appId, setAppId] = useState(null);
     const [createdOn, setCreatedOn] = useState(null);
 
-    console.log(data);
-
 
     const headers = [
         { key: 'statusName', label: 'Status' },
@@ -22,7 +20,7 @@ const SignOffHistory = ({ row }) => {
                 if (value) {
                     const isValidBase64 = value.startsWith('data:image/png;base64,');
                     return isValidBase64 ? (
-                        <img src={value} alt="Signature" style={{ width: '100px', height: 'auto' }} />
+                        <img src={value} alt="Signature" style={{ width: '200px', height: 'auto' }} />
                     ) : (
                         'Invalid Signature Data'
                     );
@@ -66,7 +64,6 @@ const SignOffHistory = ({ row }) => {
                         <tr key={rowIndex}>
                             {headers.map(header => (
                                 <td key={header.key}>
-        
                                     {header.render ? header.render(row[header.key]) : row[header.key]}
                                 </td>
                             ))}

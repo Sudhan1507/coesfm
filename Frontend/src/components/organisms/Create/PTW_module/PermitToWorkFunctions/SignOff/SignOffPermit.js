@@ -51,7 +51,8 @@ const SignOffPermit = ({ row, onClose }) => {
                 statusName: row.statusName,
                 userId: userdata.user.userId,
                 signOffRemarks: data.signOffRemarks,
-                signature: signatureImage
+                signature: signatureImage,
+                email:row.email
             };
 
                 try {

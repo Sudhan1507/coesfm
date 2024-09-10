@@ -1,6 +1,9 @@
 import PermitToWorkService from "../../../services/PTW_module/PermitToWork/ptw_service.js";
 import handleError from "../../../utils/pt_utils.js";
 import EmailService from "../../../services/PTW_module/E-mail/email_service.js";
+import crypto from 'crypto';
+import db from '../../../config/db_config.js';
+
 
 // Function to generate a token
 function generateToken() {
@@ -11,6 +14,7 @@ function generateToken() {
 function toBase64(str) {
     return Buffer.from(str).toString('base64');
 }
+
 
 export default class PermitToWorkController{
     static async getAllPermitToWorkController(req,res){
@@ -96,14 +100,28 @@ export default class PermitToWorkController{
 
     static async addSignOffController(req, res) {
         const { appId } = req.params;
-        const { statusName, signOffRemarks, userId, signature } = req.body;
+        const { statusName, signOffRemarks, userId, signature,email } = req.body;
         
         if (!appId || !statusName || !signOffRemarks || !userId || !signature) {
             return res.status(400).json({ status: 'error', message: 'Application Id or Sign-off details not found' });
         }
         try {
             
-            await PermitToWorkService.addSignOffService(appId, statusName, signOffRemarks, userId, signature);
+           await PermitToWorkService.addSignOffService(appId, statusName, signOffRemarks, userId, signature);
+
+           const result = await PermitToWorkService.getPermitToWorkByIdService(appId);
+
+           if(email && result[0].appStatus=== 'Completed'){
+
+            const subject =`Permit To Work Application PTW${appId}: Status updated`;
+
+            const mailContent =`<p><h1>The status of Permit to Work Application ID:${appId} has been updated to <strong>Work Completed</strong></h1></p>
+                        <p> Permit to Work Application ID: <strong>PTW${appId}</strong></p>
+                       <p><strong> This is an automated notification email. Please do not reply to this email.</strong></p>`;
+    
+            await EmailService.sendNotification(email,subject,mailContent)
+           }
+
             return res.status(200).json({ status: 'success' });
         } catch (err) {
             console.error('Error in addSignOffController: ', err);
@@ -190,29 +208,77 @@ export default class PermitToWorkController{
     }
 
     static async restartAppFlowController(req, res) {
-        const { appId, statusName, userId, signOffRemarks,username } = req.body;
-        if (!appId || !statusName || !userId || !signOffRemarks || !username) {
-            return res.status(400).json({ status: 'Application Id, Status Name, User Id, username or Sign-off Remarks not found' });
+        const { appId, statusName, userId, signOffRemarks, username, email, checklistId, ptId } = req.body;
+        if (!appId || !statusName || !userId || !signOffRemarks || !username || !checklistId || !ptId) {
+            return res.status(400).json({ status: 'Application Id, Status Name, User Id, username, email, checklistId, ptId, or Sign-off Remarks not found' });
         }
+    
+        let connection;
+    
         try {
             const result = await PermitToWorkService.restartAppFlowService(appId, statusName, userId, signOffRemarks);
-            const subject =`Permit to Work PTW${appId}: Change requested`;
 
-            const mailContent =`<p><h1>${username} has requested a change in the Permit to Work Application</h1></p>
-                       <ul>
-                       <li> <p>Permit to Work ID: PTW${appId}</p></li>
-                       <li> <p>Remarks: ${signOffRemarks}</p></li>
-                       </ul>
-                        <p><a href="${link}" target="_blank">Link to resubmit Application</a></p>
-                       <p><strong> This is an automated notification email. Please do not reply to this email.</strong></p>`;
+            if(email){
+            
+            // Generate a token and set expiration time
+            const token = generateToken();
+            const expiration = new Date();
+            expiration.setHours(expiration.getHours() + 1);
     
-          const response=  await EmailService.sendNotification(payload.email,subject,mailContent)
-           return res.status(200).json(result);
+            // Ensure ptId is treated as a string for base64 encoding
+            const link = `http://localhost:3000/request_change_permit_to_work/${toBase64(email)}/${toBase64(ptId.toString())}/${toBase64(appId.toString())}/${token}`;
+    
+            // Get a connection from the pool
+            connection = await db.getConnection();
+            
+            // Start a transaction
+            await connection.beginTransaction();
+    
+            // Check if a token already exists for this checklistId and email
+            const [existingToken] = await connection.query(
+                'SELECT COUNT(*) as count FROM checklist_token WHERE token=?',
+                [token]
+            );
+    
+            // Insert the token only if it doesn't already exist
+            if (existingToken[0].count === 0) {
+                await connection.execute(
+                    'INSERT INTO checklist_token (email, checklistId, token, used, expiration) VALUES (?, ?, ?, ?, ?)',
+                    [email, checklistId, token, false, expiration]
+                );
+            }
+    
+            // Commit the transaction
+            await connection.commit();
+    
+            const subject = `Permit to Work PTW${appId}: Change requested`;
+    
+            const mailContent = `
+                <p><h1>${username} has requested a change in the Permit to Work Application</h1></p>
+                <ul>
+                    <li><p>Permit to Work ID: PTW${appId}</p></li>
+                    <li><p>Remarks: ${signOffRemarks}</p></li>
+                </ul>
+                <p><a href="${link}" target="_blank">Link to resubmit Application</a></p>
+                <p><strong>This is an automated notification email. Please do not reply to this email.</strong></p>
+            `;
+    
+            const response = await EmailService.sendNotification(email, subject, mailContent);
+        }
+            return res.status(200).json(result);
         } catch (err) {
+            if (connection) {
+                // Rollback the transaction if an error occurs
+                await connection.rollback();
+            }
             res.status(500).json({ status: 'failed', message: 'Failed to restart application flow.', error: err.message });
+        } finally {
+            if (connection) {
+                // Release the connection back to the pool
+                await connection.release();
+            }
         }
     }
-
     static async updateChecklistResponseController(req, res) {
         const { appId } = req.params;
         const payload = req.body;

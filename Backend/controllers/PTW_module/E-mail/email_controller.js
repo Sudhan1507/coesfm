@@ -39,7 +39,7 @@ export default class EmailController {
                 [token]
             );
 
-            console.log('Existing token count:', existingToken[0].count);
+            // console.log('Existing token count:', existingToken[0].count);
 
             // Insert the token only if it doesn't already exist
             if (existingToken[0].count === 0) {

@@ -2,6 +2,7 @@ import PermitToWorkEmailService from "../../../services/PTW_module/PermitToWork/
 import db from '../../../config/db_config.js';
 import EmailService from "../../../services/PTW_module/E-mail/email_service.js";
 
+
 export default class PermitToWorkEmailController{
 
     static async getPermitToWorkByIdController(req,res){
@@ -74,5 +75,77 @@ export default class PermitToWorkEmailController{
             return res.status(500).json({ status: 'failed', message: 'Internal server error' });
         }
     };
+
+   
+    static async updateChecklistResponseController(req, res) {
+        const { appId } = req.params;
+        const payload = req.body;
+    
+        // Validate the token
+        const [rows] = await db.query(
+            'SELECT used FROM checklist_token WHERE token = ?',
+            [payload.token]
+        );
+    
+        if (rows.length === 0 || rows[0].used === 1) {
+            return res.status(400).json({ message: 'Invalid, expired, or already used token' });
+        }
+    
+        try {
+            // Iterate over payload.responses
+            for (const item of payload.responses) {
+                const { serialNo, checkOptions, remarks } = item;
+                
+                if (!appId || !serialNo || !remarks) {
+                    return res.status(400).json({ status: 'Application Id, Serial No, or Remarks not found' });
+                }
+    
+                // Assuming checkOptions can be optional, adjust validation as needed
+                await PermitToWorkEmailService.updateChecklistResponseService(appId, serialNo, checkOptions || null, remarks);
+            }
+    
+            // After processing, mark the token as used
+            await db.query(
+                'UPDATE checklist_token SET used = 1 WHERE token = ?',
+                [payload.token]
+            );
+    
+            return res.status(200).json({ status: 'success' });
+        } catch (err) {
+            console.error('Error in updateChecklistResponseController: ', err);
+            return res.status(500).json({ status: 'failed' });
+        }
+    }
+    
+    static async updateAppStatusController(req,res){
+        const {appId} = req.params;
+
+        if (!appId) {
+            return res.status(400).json({ status: 'Application Id not found' });
+        }
+        try{
+          const response=  await PermitToWorkEmailService.updateAppStatusService(appId);
+          console.log(response[0].changedRows===1)
+          if(response[0].changedRows===1)
+            return res.status(200).json({ status:'success' });
+        }catch(err){
+            console.error('Error in updateAppStatusController: ',err);
+            return res.status(500).json({ status: 'failed' });
+        }
+    }
+
+    static async insertAppSignOffController(req,res){
+        const { appId, statusName,email } = req.body;
+        if (!appId || !statusName || !email) {
+            return res.status(400).json({ status: 'Application Id, Status Name, email not found' });
+        }
+        try{
+            await PermitToWorkEmailService.insertAppSignOffService(appId, statusName,email);
+            return res.status(200).json({ status:'success' });
+        }catch(err){
+            console.error('Error in insertAppSignOffService: ',err);
+            return res.status(500).json({ status: 'failed' });
+        }
+    }
 
 };

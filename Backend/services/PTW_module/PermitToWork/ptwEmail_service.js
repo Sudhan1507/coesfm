@@ -22,4 +22,46 @@ export default class PermitToWorkEmailService{
         }
     };
 
+    static async restartAppFlowService(appId, statusName, signOffRemarks) {
+        try {
+            // First, insert into app_sign_off
+            await PermitToWorkEmailDao.requestChange(appId, statusName, signOffRemarks);
+            
+            // Then, update m_permit_to_work
+            await PermitToWorkEmailDao.restartAppFlow(appId);
+            
+            return { success: true, message: 'Application flow restarted successfully.' };
+        } catch (err) {
+            console.error('Error processing application restart: ', err);
+        }
+    }
+
+    static async updateChecklistResponseService(appId, serialNo, checkOptions, remarks) {
+        try {
+            // Update checklist responses
+            await PermitToWorkEmailDao.updateChecklistResponse(appId, serialNo, checkOptions, remarks);
+            console.log('{ status: Update checklist response service: success }');
+        } catch (err) {
+            console.error('Error in updateChecklistResponseService: ', err);
+        }
+    }
+    static async updateAppStatusService(appId){
+        try{
+         const response=   await PermitToWorkEmailDao.updateAppStatus(appId);
+            console.log('{ status: Update application status service: success }');
+            return response;
+        }catch(err){
+            console.error('Error in updateAppStatusService: ', err);
+        }
+    }
+    static async insertAppSignOffService(appId, statusName, email) {
+        try {
+            await PermitToWorkEmailDao.insertAppSignOff(appId, statusName, email);
+            console.log('{ status: Insert app sign off service: success }');
+            return true;
+        } catch (err) {
+            console.error('Error in insertAppSignOff: ', err);
+        }
+    }
+
 };

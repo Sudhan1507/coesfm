@@ -35,6 +35,7 @@ import Iaq from "./Views/IAQ/Iaq.jsx";
 import './Main.css';
 import ChecklistForm from "./Views/PTW_module/PTW/Checklist/ChecklistPage/ChecklistForm.js";
 import SuccessFormSubmit from "./Views/PTW_module/PTW/SuccessForm/SuccessFormSubmit.js";
+import UpdateChecklistForm from "./Views/PTW_module/PTW/Checklist/UpdateChecklistPage/UpdateChecklistForm.js";
 
 
 const App = () => {
@@ -43,6 +44,9 @@ const App = () => {
   <Router>
     <Routes>
       <Route path="/complete_permit_to_work/:email/:ptid/:token" element={<ChecklistForm/>} />
+      <Route path="/request_change_permit_to_work/:email/:ptid/:appId/:token" element={<UpdateChecklistForm/>} />
+
+
       <Route path="/success" element={<SuccessFormSubmit/>}/>
 
       <Route element={<PrivateRoutes/>}>

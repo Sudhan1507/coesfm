@@ -19,7 +19,7 @@ export default class EmailService {
             html: mailContent 
         };
 
-        try {
+        try {   
             const info = await transporter.sendMail(mailOptions);
             console.log('Email sent:', info.response);
             return info;

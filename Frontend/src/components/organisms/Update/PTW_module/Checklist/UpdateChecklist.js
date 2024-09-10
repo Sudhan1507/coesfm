@@ -80,7 +80,7 @@ const UpdateChecklist = ({ row, showAlert, onClose }) => {
             remarks: remarks,
             updatedBy: userdata.user.userId,
         }));
-        console.log("Submitting payload:", payload); // Debugging
+        // console.log("Submitting payload:", payload); // Debugging
 
         try {
             // Update checklist responses

@@ -5,6 +5,7 @@
 */.pnp
 */.pnp.js
 */app_req.txt
+*/app.env
 
 # testing
 */coverage

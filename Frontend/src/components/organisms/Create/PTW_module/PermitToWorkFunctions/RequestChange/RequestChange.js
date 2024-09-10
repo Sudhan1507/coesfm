@@ -10,6 +10,10 @@ const RequestChange = ({ row, showAlert, onClose }) => {
     const userdata = getUserData();
     const [modalOpen, setModalOpen] = useState(true);
     const [signOffRemarks, setSignOffRemarks] = useState("");
+    const [errors, setErrors] = useState({
+        signOffRemarks: "",
+      });
+
 
     const handleCloseModal = () => {
         setModalOpen(false);
@@ -18,7 +22,12 @@ const RequestChange = ({ row, showAlert, onClose }) => {
 
     const handleChange = (e) => {
         setSignOffRemarks(e.target.value);
+        setErrors({ ...errors, signOffRemarks: "" });
+
     };
+    const handleClear = () => {
+        setSignOffRemarks('');
+      };
 
     const requestChange = async () => {
         const payload = {
@@ -28,6 +37,9 @@ const RequestChange = ({ row, showAlert, onClose }) => {
             signOffRemarks: signOffRemarks,
             updatedBy: userdata.user.userId,
             username: userdata.user.displayName,
+            email:row.email,
+            ptId: row.ptId,
+            checklistId: row.checklistId
         };
 
         try {
@@ -38,7 +50,7 @@ const RequestChange = ({ row, showAlert, onClose }) => {
                 duration: 3000,
                 icon: <CheckCircleOutlineIcon />
             });
-
+            handleClear();
             handleCloseModal();
         } catch (error) {
             showAlert({

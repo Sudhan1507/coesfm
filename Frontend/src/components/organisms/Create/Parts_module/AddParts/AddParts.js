@@ -10,6 +10,8 @@ import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 const AddParts = ({ onSave, onCancel, showAlert }) => {
   const userdata = getUserData();
   const [validationError, setValidationError] = useState({});
+  const [loading, setLoading] = useState(false); // Track loading state
+
   const [parts, setParts] = useState({
     partname: "",
     partsType: "",
@@ -119,6 +121,8 @@ const AddParts = ({ onSave, onCancel, showAlert }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
+      setLoading(true); // Start loading
+
       const formData = {
         partname: parts.partname,
         partsType: parts.partsType,
@@ -157,6 +161,8 @@ const AddParts = ({ onSave, onCancel, showAlert }) => {
           duration: 3000,
           icon: <ErrorOutlineOutlinedIcon />
         });
+      }finally {
+        setLoading(false); // End loading
       }
     }
   };

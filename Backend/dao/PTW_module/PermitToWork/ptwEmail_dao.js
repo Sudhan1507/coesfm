@@ -15,7 +15,7 @@ static async getPermitTypeById(ptId) {
         console.error('Error executing SQL: ', error);
         throw error;
         }
-    }
+    };
 
     static async addMultipleChecklistResponses(token,ptId, activeStatus, email, responses, statusName, signOffRemarks, signature, processedAt) {
         const insertPTWSql = `INSERT INTO m_permit_to_work (ptId, activeStatus, email)
@@ -79,6 +79,43 @@ static async getPermitTypeById(ptId) {
         } finally {
             connection.release();
         }
-    }
+    };
+
+    
+    static async updateChecklistResponse(appId, serialNo, checkOptions, remarks) {
+        const checklistResponseSql = `UPDATE m_ptw_response SET checkOptions=?, remarks=? WHERE appId=? AND serialNo=?`;
+        try {
+            await db.execute(checklistResponseSql, [checkOptions, remarks, appId, serialNo]);
+            return true;
+        } catch (err) {
+            console.error('Error updating checklist response: ', err);
+            throw err;
+        }
+    };
+    
+    static async updateAppStatus(appId, appStatus) {
+        const updateAppStatusSql = `UPDATE m_permit_to_work SET appStatus='' WHERE appId=?`;
+        try {
+           const response= await db.execute(updateAppStatusSql, [appId]);
+            return response;
+        } catch (err) {
+            console.error('Error updating application status: ', err);
+            throw err;
+        }
+    };
+
+    static async insertAppSignOff(appId, statusName, email) {
+        const insertSignOffSql = `
+            INSERT INTO app_sign_off (appId, statusName, email, processedAt) 
+            VALUES (?, ?, ?, NOW())`;
+
+        try {
+            await db.execute(insertSignOffSql, [appId, statusName, email]);
+            return true;
+        } catch (err) {
+            console.error('Error inserting sign off: ', err);
+            throw err;
+        }
+    };
 
 };

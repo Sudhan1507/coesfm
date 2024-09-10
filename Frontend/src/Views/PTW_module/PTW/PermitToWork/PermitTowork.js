@@ -127,7 +127,7 @@ const PermitToWork = () => {
     const canView = isAdmin || row.userId === isAssignedUser;
     
     return (
-      <div style={{"display": "flex","align-items": "center"}}>
+      <div style={{"display": "flex","alignItems": "center"}}>
         <Tooltip text='View' position='top'>
           <VisibilityOutlinedIcon style={{"cursor":"pointer"}} onClick={() =>{ 
              handleOpenDrawer('View', row)

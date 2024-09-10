@@ -9,6 +9,17 @@ export default class PermitToWorkService{
             console.error('Error in getAllPermitToWorkService: ', err);
         }
     }
+
+    static async getPermitToWorkByIdService(appId){
+        try{
+            const permitToWork= await PermitToWorkDao.getPermitToWorkById(appId);
+            return permitToWork;
+        }catch(err){
+            console.error('Error in getPermitToWorkByIdService: ', err);
+            throw err;
+        }
+    }
+
     static async getPermitTypeByIdService(ptId){
         try{
             const permitType= await PermitToWorkDao.getPermitTypeById(ptId);
@@ -49,8 +60,9 @@ export default class PermitToWorkService{
 
     static async addSignOffService(appId, statusName, signOffRemarks, userId, signature) {
         try {
-            await PermitToWorkDao.addSignOff(appId, statusName, signOffRemarks, userId, signature);
-            console.log('{ status: Add sign-off service: success }');
+         const response = await PermitToWorkDao.addSignOff(appId, statusName, signOffRemarks, userId, signature);
+            // console.log('{ status: Add sign-off service: success }');
+            return response;
         } catch (err) {
             console.error('Error in addSignOffService: ', err);
         }

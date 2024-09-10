@@ -34,6 +34,9 @@ app.use(bodyParser.json({ limit: '10mb' }));
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
+// Serve static files from the 'web' directory (for frontend)
+app.use(express.static('web'));
+
 // Routes
 app.use('/permitType', PermitTypeRoutes);
 app.use('/checklist',ChecklistRoutes);
