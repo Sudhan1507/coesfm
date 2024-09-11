@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { MdDelete } from "react-icons/md";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { HiPencilSquare } from "react-icons/hi2";
 import { IoMdBulb } from "react-icons/io";
 import axiosInstance from "../../services/service";
 import Layout from "../../components/molecules/Layout/Layout";
 
 const Report = () => {
-  const [faultreport, setFaultreport] = useState([]);  // State to store fault reports
-  const [filterrequest, setFilterRequest] = useState([]);  // State to store filtered requests
-  const [selectedItem, setSelectedItem] = useState(null);  // State to store selected item
+  const [faultreport, setFaultreport] = useState([]);
+  const [filterrequest, setFilterRequest] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [fullScreenImage, setFullScreenImage] = useState(null);
 
-  // Fetch fault reports from the server
-  useEffect(() => {    
+  useEffect(() => {
     axiosInstance.get('/report/report')
       .then(response => {
         setFaultreport(response.data.data);
@@ -27,51 +27,54 @@ const Report = () => {
       });
   }, []);
 
-  // Set selected item on click
   const handleItemClick = (item) => {
-    setSelectedItem(item);  
+    setSelectedItem(item);
   };
 
-  // Delete a fault report
-  const handleDelete = (id) => {    
+  const handleDelete = (id) => {
     axiosInstance.delete('/report/delete_request/' + id)
       .then(result => {
         if (result.data.Status) {
-          const updatedFaultReport = faultreport.filter(item => item.id !== id);
-          setFaultreport(updatedFaultReport);
-          setFilterRequest(updatedFaultReport);
+          setFaultreport(prev => prev.filter(item => item.id !== id));
+          setFilterRequest(prev => prev.filter(item => item.id !== id));
           if (selectedItem && selectedItem.id === id) {
-            setSelectedItem(updatedFaultReport.length > 0 ? updatedFaultReport[0] : null);
+            setSelectedItem(prev => prev.length > 0 ? prev[0] : null);
           }
         } else {
           alert(result.data.Error);
         }
       }).catch(err => {
-        console.error("Error deleting meter:", err);
-        alert("Error deleting meter. Please try again.");
+        console.error("Error deleting report:", err);
+        alert("Error deleting report. Please try again.");
       });
   };
 
-  // Search function
-  const handleSearchChange = (a) => {
-    const searchText = a.target.value.toLowerCase();
+  const handleSearchChange = (e) => {
+    const searchText = e.target.value.toLowerCase();
     const filteredRequest = faultreport.filter((e) =>
       e.zone.toLowerCase().includes(searchText) ||
       e.school.toLowerCase().includes(searchText) ||
       e.fault_type.toLowerCase().includes(searchText) ||
       e.priority.toLowerCase().includes(searchText) ||
       e.requestor_name.toLowerCase().includes(searchText) ||
-      e.id.toString().toLowerCase().includes(searchText)  // Ensuring ID is treated as a string
+      e.id.toString().toLowerCase().includes(searchText)
     );
     setFilterRequest(filteredRequest);
     setSelectedItem(filteredRequest.length > 0 ? filteredRequest[0] : null);
   };
 
+  const handleImageClick = (image) => {
+    setFullScreenImage(image);
+  };
+
+  const handleExitFullScreen = () => {
+    setFullScreenImage(null);
+  };
+
   return (
     <>
-    <Layout>
-
-    <div id="page-wrapper">
+      <Layout>
+      <div id="page-wrapper">
       <div className="app-inner-layout app-inner-layout-page">
         <div className="app-inner-layout__wrapper">
           <div className="app-inner-layout__content pt-1">
@@ -139,7 +142,12 @@ const Report = () => {
                                           <span className="text-secondary">Zone</span>
                                           <span>{item.zone}</span>
                                         </div>
-                                      
+
+                                        <div className="content">
+                                          <span className="text-secondary">Reported </span>
+                                          <span  className="text-primary">{item.report_said}</span>
+                                        </div>
+
                                       </div>
                                     </div>
                                   ))}
@@ -235,19 +243,49 @@ const Report = () => {
                                         <span>Request Contact Number</span>
                                         <span>{selectedItem.requestor_contact}</span>
                                       </li>
+                                      <li>
+                                        <span>Reported </span>
+                                        <span>{selectedItem.report_said}</span>
+                                      </li>
                                     </ul>
                                     <div role="separator" className="ant-divider ant-divider-horizontal ant-divider-with-text-center" fragment="ed93cefd1e">
                                       <span className="ant-divider-inner-text">Fault Images</span>
                                     </div>
-                                    <div className="full-content-images card-request-images">
-                                      <div>
-                                        <img src={selectedItem.image} className="img-thumbnail" alt="upload" style={{"width":"100px", "height":"auto"}} />
-                                      </div>
+                                    <div style={{
+                                      display: 'flex',
+                                      flexWrap: 'wrap',
+                                      gap: '10px', // Adjust as needed
+                                      justifyContent: 'center', // Center items horizontally
+                                      alignItems: 'center' // Center items vertically
+                                      }}
+                                     className="full-content-images card-request-images">
+                                      {selectedItem.image && JSON.parse(selectedItem.image).map((image, index) => (
+                                        <div key={index} style={{
+                                          display: 'flex',
+                                          justifyContent: 'center',
+                                          alignItems: 'center'
+                                        }}>
+                                          <img
+                                            src={image}
+                                            alt={`upload-${index}`}
+                                            style={{
+                                              width: '100px',
+                                              height: 'auto',
+                                              margin: '5px', // Adjust as needed
+                                              cursor: 'pointer',
+                                              border: '1px solid #ddd', // Optional: add a border to thumbnail images
+                                              borderRadius: '4px' // Optional: round the corners of thumbnail images
+                                            }}
+                                            onClick={() => handleImageClick(image)}
+                                          />
+                                        </div>
+                                      ))}
                                     </div>
+                                    </div>
+                                    )}
                                   </div>
-                                )}
+                                </div>
                               </div>
-                              {/* End of Right Side */}
                             </div>
                           </div>
                         </div>
@@ -259,12 +297,33 @@ const Report = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    </Layout>
+      </Layout>
+      {fullScreenImage && (
+        <div
+          className="full-screen-overlay"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+          }}
+          onClick={handleExitFullScreen}
+        >
+          <img
+            src={fullScreenImage}
+            alt="Full-screen"
+            style={{ maxHeight: '90%', maxWidth: '90%', cursor: 'pointer' }}
+          />
+        </div>
+      )}
     </>
   );
-}
+};
 
 export default Report;

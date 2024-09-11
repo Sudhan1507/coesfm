@@ -154,4 +154,86 @@ router.delete('/delete_location/:id', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/api/:id', authenticateToken, async (req, res) => {
+    const locQRID = req.params.id;
+    const sql = `
+      SELECT
+        l.id AS location_id,
+        l.locQRID,
+        l.block,
+        l.level,
+        l.room_no,
+        l.room_name,
+        l.school_name AS location_school_name,
+        s.zone,
+        s.school_name AS school_table_school_name
+      FROM 
+        location l
+      LEFT JOIN 
+        school s 
+      ON 
+        l.school_id = s.id
+      WHERE 
+        l.locQRID = ?`;
+  
+    try {
+      const [result] = await db.query(sql, [locQRID]);
+  
+      if (result.length === 0) {
+        return res.json({ Status: false, Error: "Location not found" });
+      }
+  
+      return res.json({ Status: true, Data: result[0] });
+    } catch (err) {
+      return res.json({ Status: false, Error: "Query Error: " + err.message });
+    }
+  });
+  
+
+// router.get('/api/:locQRID', authenticateToken, async (req, res) => {
+//     const locQRID = req.params.locQRID;
+
+//     const sql = `
+//       SELECT
+//         l.id AS location_id,
+//         l.locQRID,
+//         l.block,
+//         l.level,
+//         l.room_no,
+//         l.room_name,
+//         l.school_name AS location_school_name,
+//         s.zone,
+//         s.school_name AS school_table_school_name
+//       FROM 
+//         location l
+//       LEFT JOIN 
+//         school s 
+//       ON 
+//         l.school_id = s.id
+//       WHERE 
+//         l.locQRID = ?`;
+
+//     try {
+        
+//            await db.query(sql, [locQRID], (err, result) => {
+//                 if (err) {
+//                     reject(err); // Reject the promise with the error
+//                 } else {
+//                     resolve(result); // Resolve the promise with the result
+//                 }
+//             });
+
+//         if (result.length === 0) {
+//             return res.status(404).json({ Status: false, Error: "Location not found" });
+//         }
+
+//         return res.status(200).json({ Status: true, Data: result[0] });
+
+//     } catch (err) {
+//         console.error('Query Error:', err);
+//         return res.status(500).json({ Status: false, Error: "Query Error" });
+//     }
+// });
+
+
 export default router;

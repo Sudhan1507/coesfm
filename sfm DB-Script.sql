@@ -1,5 +1,3 @@
-CREATE SCHEMA sfm;
-USE sfm;
 
 CREATE TABLE parts (
     partId INT AUTO_INCREMENT PRIMARY KEY,
@@ -288,7 +286,8 @@ CREATE TABLE fault_report (
     requestor_contact VARCHAR(255) NOT NULL,
     description  VARCHAR(255),
     image LONGTEXT,
-    created_at DATE NOT NULL
+    created_at DATE NOT NULL,
+    report_said VARCHAR(255)
 );
 
 CREATE TABLE sensor_data (

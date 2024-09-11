@@ -4,14 +4,19 @@ import authenticateToken from '../../../middlewares/auth.js';
 
 const router = Router();
 
-
 // Add Report Fault
 router.post('/add_request', authenticateToken, async (req, res) => {
     const sql = `INSERT INTO fault_report 
-    (fault_type, priority, zone, school, block, level, room_number, room_name, droup_down, requestor_name, requestor_contact, description, image, created_at) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const created_at = new Date().toISOString().slice(0, 10); // Extracting the date in 'YYYY-MM-DD' format
+    (fault_type, priority, zone, school, block, level, room_number, room_name, droup_down, requestor_name, requestor_contact, description, image, created_at,report_said) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
+    // Get the current date
+    const created_at = new Date().toISOString().slice(0, 10);
+
+    let images;
+    if (Array.isArray(req.body.images)) {
+        images = JSON.stringify(req.body.images); // Store the JSON string of images
+    }
     const values = [
         req.body.fault_type,
         req.body.priority,
@@ -25,15 +30,15 @@ router.post('/add_request', authenticateToken, async (req, res) => {
         req.body.requestor_name,
         req.body.requestor_contact,
         req.body.description,
-        req.body.image,
-        created_at, // Adding the current date in 'YYYY-MM-DD' format
-    ];
-    
-        
+        images,  // Store the JSON string of images
+        created_at,
+        req.body.report_said,
+    ];        
     try {
         await db.query(sql, values);
         res.json({ Status: true });
     } catch (err) {
+        console.error("Error inserting fault report:", err.message); 
         res.json({ Status: false, Error: err.message });
     }
 });
@@ -49,7 +54,7 @@ router.get('/report', authenticateToken, async (req, res) => {
     }
 });
 
-// Get report by ID
+//   Edit Report Fault
 router.get('/report/:id', authenticateToken, async (req, res) => {
     const id = req.params.id;
     const sql = "SELECT * FROM fault_report WHERE id = ?";
@@ -57,9 +62,10 @@ router.get('/report/:id', authenticateToken, async (req, res) => {
         const [result] = await db.query(sql, [id]);
         res.json({ Status: true, Result: result });
     } catch (err) {
-        res.json({ Status: false, Error: "Query Error: " + err.message });
+        res.json({ Status: false, Error: err.message });
     }
 });
+
 
 // Update report
 router.put('/request/:id', authenticateToken, async (req, res) => {

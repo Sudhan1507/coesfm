@@ -26,6 +26,8 @@ import Edit_Attendance from "./Views/Attendance/Edit_Attendance.jsx";
 import Report from "./Views/Fault Report/Report.jsx";
 import Add_Report from "./Views/Fault Report/Add_Report.jsx";
 import Edit_Report from "./Views/Fault Report/Edit_Report.jsx";
+import Fault_Report from './Views/Fault Report/Fault_Report.jsx'
+import QRCodePage from "./Views/Location/QRcodegen.jsx";
 import Booking from "./Views/Booking Management/Booking.jsx";
 import AddBooking from "./Views/Booking Management/AddBooking.jsx";
 import Booking_History from "./Views/Booking Management/Booking_History.jsx";
@@ -64,6 +66,7 @@ const App = () => {
         <Route path='/display/location/:id' element={<Location/>}></Route>
         <Route path='/display/add_location/:id' element={<AddLocation/>}></Route>
         <Route path='/display/edit_location/:id' element={<Edit_Location/>}></Route>
+        <Route path='/display/qrcode/:locQRID' element={<QRCodePage/>}></Route>
 
         <Route path='/display/attendance' element={<Attendance/>}></Route>
         <Route path='/display/add_attendance' element={<Add_Attendance/>}></Route>
@@ -72,6 +75,7 @@ const App = () => {
         <Route path='/display/report' element={<Report/>}></Route>
         <Route path='/display/add_request' element={<Add_Report/>}></Route>
         <Route path='/display/edit_request/:id' element={<Edit_Report/>}></Route>
+        <Route path='/display/fault_report' element={<Fault_Report/>}></Route>
         
         <Route path='/display/booking' element={<Booking/>}></Route>
         <Route path='/display/add_booking' element={<AddBooking/>}></Route>

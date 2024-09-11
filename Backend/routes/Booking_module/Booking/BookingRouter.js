@@ -54,27 +54,26 @@ router.post('/add_booking', authenticateToken, async (req, res) => {
     }
 });
 
-// Update Booking Statuses
 const updateBookingStatuses = async () => {
     // console.log('Checking booking statuses...');
 
     try {
+        // Update bookings to 'ongoing' if the current time falls within the booking time
         const updateOngoing = `
             UPDATE bookings
             SET status = 'ongoing'
-            WHERE CURRENT_DATE = date
-            AND CURRENT_TIME >= timeStart
-            AND CURRENT_TIME <= timeEnd
+            WHERE NOW() >= CONCAT(date, ' ', timeStart)
+            AND NOW() <= CONCAT(date, ' ', timeEnd)
             AND status = 'upcoming'
         `;
         const [ongoingResults] = await db.query(updateOngoing);
         // console.log('Ongoing bookings updated:', ongoingResults.affectedRows);
 
+        // Update bookings to 'completed' if the current time is past the booking end time
         const updateCompleted = `
             UPDATE bookings
             SET status = 'completed'
-            WHERE CURRENT_DATE = date
-            AND CURRENT_TIME > timeEnd
+            WHERE NOW() > CONCAT(date, ' ', timeEnd)
             AND status IN ('upcoming', 'ongoing')
         `;
         const [completedResults] = await db.query(updateCompleted);
@@ -86,6 +85,7 @@ const updateBookingStatuses = async () => {
 
 // Call the function every minute (60 seconds)
 setInterval(updateBookingStatuses, 60 * 1000);
+
 
 // Edit Booking
 router.get('/get_booking/:id', authenticateToken, async (req, res) => {
@@ -152,7 +152,7 @@ router.put('/cancel_booking/:id', authenticateToken, async (req, res) => {
 });
 
 // Endpoint to get zones
-router.get('/get_zones', authenticateToken, async (req, res) => {
+router.get('/get_zones', authenticateToken , async (req, res) => {
     try {
         const getZonesQuery = 'SELECT DISTINCT zone FROM school';
         const [zones] = await db.query(getZonesQuery);
