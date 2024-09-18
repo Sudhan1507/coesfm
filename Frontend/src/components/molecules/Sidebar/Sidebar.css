@@ -103,7 +103,8 @@ body{
   background-color: rgb(218, 41, 83);
 }
 
-.sidebar-contents-master-dropdown-list-parts,.sidebar-contents-master-dropdown-list-ptw,.sidebar-contents-master-dropdown-list-meter,
+.sidebar-contents-master-dropdown-list-parts,.sidebar-contents-master-dropdown-list-ptw,
+.sidebar-contents-master-dropdown-list-procurement,.sidebar-contents-master-dropdown-list-meter,
 .sidebar-contents-master-dropdown-list-attendance,.sidebar-contents-master-dropdown-list-school,
 .sidebar-contents-master-dropdown-list-report,.sidebar-contents-master-dropdown-list-booking,
 .sidebar-contents-master-dropdown-list-iaq{
@@ -118,6 +119,7 @@ body{
 }
 
 .dropdown-item-parts-text,.dropdown-item-ptw-text,
+.dropdown-item-procurement-text,
 .dropdown-item-iaq-text,.dropdown-item-booking-text,
 .dropdown-item-report-text,.dropdown-item-school-text,
 .dropdown-item-attendance-text,.dropdown-item-meter-text{

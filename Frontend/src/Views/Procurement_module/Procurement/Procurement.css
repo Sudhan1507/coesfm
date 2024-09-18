@@ -1,0 +1,12 @@
+/* .procurement-container {
+    display: flex;
+    flex-direction: column;
+  }
+   */
+  .procurement-container-navitem {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+  }
+  
