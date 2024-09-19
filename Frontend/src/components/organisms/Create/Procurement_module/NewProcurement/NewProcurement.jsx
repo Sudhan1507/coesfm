@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Body from '../../../../molecules/Body/Body.jsx';
 import Button from '../../../../atoms/Button/Button.jsx';
 import './NewProcurement.css';
@@ -12,6 +12,18 @@ const breadcrumbItems = [
 ];
 
 const NewProcurement = () => {
+
+    const [formfields,setFormFields] = useState({
+        purchasing_entity: '',
+        status_name:'',
+        title: '',
+        quotation_description: '',
+        closing_date:'',
+        created_by: '',
+        contact_phone: '',
+        contact_email: ''
+    });
+
     return (
         <>
             <Body header="Procurement" breadcrumbItems={breadcrumbItems}>

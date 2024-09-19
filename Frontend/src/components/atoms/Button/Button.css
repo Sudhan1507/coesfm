@@ -93,9 +93,9 @@
 }
 
 .btn-cancel {
-  color: #fff;
-  background-color: #ff6337;
-  border-color: #ff6337;
+  color: #fff !important;
+  background-color: #ff6337 !important;
+  border-color: #ff6337 !important;
 }
 
 .btn-cancel:hover {
