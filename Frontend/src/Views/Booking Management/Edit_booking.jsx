@@ -95,7 +95,7 @@ const Edit_Booking = () => {
       axiosInstance.put(`/booking/edit_booking/${id}`, booking) 
         .then(result => {
           if (result.data.Status) {
-            navigate('/display/booking');
+            navigate('/display/space_management');
             setTimeout(() => {
               alert('Updated Successfully');
             }, 300);

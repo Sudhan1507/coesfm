@@ -8,26 +8,6 @@ const router = Router();
 router.post('/add_booking', authenticateToken, async (req, res) => {
     const { zone, schoolName, block, level, roomNo, roomName, date, timeStart, timeEnd, remarks, equipment } = req.body;
 
-    if (!zone || !schoolName || !block || !level || !roomNo || !roomName || !date || !timeStart || !timeEnd) {
-        return res.status(400).json({ success: false, Error: 'Missing required fields' });
-    }
-
-    try {
-        // Check for existing bookings that overlap with the requested time slot
-        const checkOverlapQuery = `
-            SELECT * FROM bookings
-            WHERE roomNo = ? AND date = ? AND (
-                (timeStart < ? AND timeEnd > ?) OR
-                (timeStart < ? AND timeEnd > ?) OR
-                (timeStart <= ? AND timeEnd >= ?)
-            )`;
-        const [overlapResults] = await db.query(checkOverlapQuery, [roomNo, date, timeStart, timeStart, timeEnd, timeEnd, timeStart, timeEnd]);
-
-        if (overlapResults.length > 0) {
-            return res.status(400).json({ success: false, Error: 'Time slot is already booked' });
-        }
-
-        // Insert the new booking if no overlap is found
         const sql = `INSERT INTO bookings 
             (zone, schoolName, block, level, roomNo, roomName, date, timeStart, timeEnd, remarks, equipment) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -45,8 +25,8 @@ router.post('/add_booking', authenticateToken, async (req, res) => {
             remarks || null,
             JSON.stringify(equipment)
         ];
-
-        await db.query(sql, values);
+try{
+            await db.query(sql, values);
         res.json({ success: true });
     } catch (err) {
         console.error('Error:', err);
@@ -55,29 +35,40 @@ router.post('/add_booking', authenticateToken, async (req, res) => {
 });
 
 const updateBookingStatuses = async () => {
-    // console.log('Checking booking statuses...');
+    // Query to update status to 'ongoing'
+    const updateOngoing = `
+      UPDATE bookings
+      SET status = 'ongoing'
+      WHERE CURRENT_DATE = date
+      AND CURRENT_TIME >= timeStart
+      AND CURRENT_TIME <= timeEnd
+      AND status = 'upcoming'`;
+
+    // Query to update status to 'completed'
+    const updateCompleted = `
+      UPDATE bookings
+      SET status = 'completed'
+      WHERE CURRENT_DATE = date
+      AND CURRENT_TIME > timeEnd
+      AND status IN ('upcoming', 'ongoing')`;
+
+    // Query to update status back to 'upcoming' for bookings that are not started yet
+    const updateUpcoming = `
+      UPDATE bookings
+      SET status = 'upcoming'
+      WHERE CURRENT_DATE = date
+      AND CURRENT_TIME < timeStart
+      AND status != 'upcoming'`;
 
     try {
-        // Update bookings to 'ongoing' if the current time falls within the booking time
-        const updateOngoing = `
-            UPDATE bookings
-            SET status = 'ongoing'
-            WHERE NOW() >= CONCAT(date, ' ', timeStart)
-            AND NOW() <= CONCAT(date, ' ', timeEnd)
-            AND status = 'upcoming'
-        `;
-        const [ongoingResults] = await db.query(updateOngoing);
-        // console.log('Ongoing bookings updated:', ongoingResults.affectedRows);
-
-        // Update bookings to 'completed' if the current time is past the booking end time
-        const updateCompleted = `
-            UPDATE bookings
-            SET status = 'completed'
-            WHERE NOW() > CONCAT(date, ' ', timeEnd)
-            AND status IN ('upcoming', 'ongoing')
-        `;
-        const [completedResults] = await db.query(updateCompleted);
-        // console.log('Completed bookings updated:', completedResults.affectedRows);
+        // Execute the 'ongoing' update query
+        await db.query(updateOngoing);
+        
+        // Execute the 'completed' update query
+        await db.query(updateCompleted);
+        
+        // Execute the 'upcoming' update query
+        await db.query(updateUpcoming);
     } catch (err) {
         console.error('Error updating booking statuses:', err);
     }
@@ -85,6 +76,7 @@ const updateBookingStatuses = async () => {
 
 // Call the function every minute (60 seconds)
 setInterval(updateBookingStatuses, 60 * 1000);
+
 
 
 // Edit Booking
@@ -99,10 +91,41 @@ router.get('/get_booking/:id', authenticateToken, async (req, res) => {
     }
 });
 
+router.put('/edit_booking/:id', authenticateToken ,async (req, res) => {
+    const id = req.params.id;
+    const sql = `
+        UPDATE bookings 
+        SET 
+            zone = ?, schoolName = ?, block = ?, level = ?, roomNo = ?, roomName = ?, date = ?, timeStart = ?, 
+            timeEnd = ?, remarks = ?, equipment = ? 
+        WHERE id = ?`;
+
+    const values = [
+        req.body.zone,        // Zone of the booking
+        req.body.schoolName,  // School name
+        req.body.block,       // Block
+        req.body.level,       // Level
+        req.body.roomNo,      // Room number
+        req.body.roomName,    // Room name
+        req.body.date,        // Date of the booking (make sure it's in 'YYYY-MM-DD' format)
+        req.body.timeStart,   // Start time (make sure it's in 'HH:mm' format)
+        req.body.timeEnd,     // End time (make sure it's in 'HH:mm' format)
+        req.body.remarks,     // Remarks
+        JSON.stringify(req.body.equipment), // Equipment details as a JSON string
+    ];
+    try {
+        const [result] = await db.query(sql, [...values, id]);
+        return res.json({ Status: true, Result: result });
+    } catch (err) {
+        console.error('Query Error:', err);
+        return res.json({ Status: false, Error: "Query Error: " + err.message });
+    }
+});
+
 // Get Booking
 router.get('/booking', authenticateToken, async (req, res) => {
     try {
-        const sql = "SELECT * FROM bookings WHERE status = 'upcoming'";
+        const sql = "SELECT * FROM bookings WHERE status IN ('upcoming', 'ongoing')";
         const [results] = await db.query(sql);
         res.status(200).json({ Status: true, data: results });
     } catch (err) {
@@ -111,17 +134,7 @@ router.get('/booking', authenticateToken, async (req, res) => {
     }
 });
 
-// Booking History
-router.get('/booking_history', authenticateToken, async (req, res) => {
-    try {
-        const sql = 'SELECT * FROM bookings';
-        const [results] = await db.query(sql);
-        res.status(200).json({ Status: true, data: results });
-    } catch (err) {
-        console.error('Error fetching data:', err);
-        res.status(500).json({ Status: false, Error: 'Error fetching data' });
-    }
-});
+
 
 // Delete Booking
 router.delete('/delete_booking/:id', authenticateToken, async (req, res) => {
@@ -135,21 +148,6 @@ router.delete('/delete_booking/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// Cancel Booking
-router.put('/cancel_booking/:id', authenticateToken, async (req, res) => {
-    const id = req.params.id;
-    try {
-        const sql = "UPDATE bookings SET status = 'cancelled' WHERE id = ?";
-        const [result] = await db.query(sql, [id]);
-        if (result.affectedRows > 0) {
-            res.json({ Status: true, Message: "Booking canceled successfully" });
-        } else {
-            res.json({ Status: false, Message: "No booking found with the given ID" });
-        }
-    } catch (err) {
-        res.json({ Status: false, Error: "Query Error: " + err });
-    }
-});
 
 // Endpoint to get zones
 router.get('/get_zones', authenticateToken , async (req, res) => {
@@ -278,77 +276,5 @@ router.post('/get_room_details', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-router.post('/check_availability', authenticateToken, async (req, res) => {
-    const { schoolName, date } = req.body;
-
-    if (!schoolName || !date) {
-        return res.status(400).json({ success: false, message: 'Missing required fields' });
-    }
-
-    const query = `
-        SELECT l.*, b.timeStart, b.timeEnd
-        FROM location l
-        LEFT JOIN bookings b ON l.room_no = b.roomNo
-        AND b.date = ?
-        AND b.schoolName = ?
-        WHERE l.school_name = ?
-    `;
-
-    try {
-        const [results] = await db.query(query, [date, schoolName, schoolName]);
-        res.json({ success: true, locations: results });
-    } catch (err) {
-        console.error("Database query failed:", err);
-        res.status(500).json({ success: false, message: 'Database query failed.' });
-    }
-});
-
-router.put('/edit_booking/:id', authenticateToken, async (req, res) => {
-    const id = req.params.id;
-    const sql = `
-        UPDATE bookings 
-        SET 
-            zone = ?, 
-            schoolName = ?, 
-            block = ?, 
-            level = ?, 
-            roomNo = ?, 
-            roomName = ?, 
-            date = ?, 
-            timeStart = ?, 
-            timeEnd = ?, 
-            remarks = ?, 
-            equipment = ? 
-        WHERE id = ?`;
-
-    const values = [
-        req.body.zone,         // Zone of the booking
-        req.body.schoolName,   // School name
-        req.body.block,        // Block
-        req.body.level,        // Level
-        req.body.roomNo,       // Room number
-        req.body.roomName,     // Room name
-        req.body.date,         // Date of the booking (make sure it's in 'YYYY-MM-DD' format)
-        req.body.timeStart,    // Start time (make sure it's in 'HH:mm' format)
-        req.body.timeEnd,      // End time (make sure it's in 'HH:mm' format)
-        req.body.remarks,      // Remarks
-        JSON.stringify(req.body.equipment), // Equipment details as a JSON string
-    ];
-
-    try {
-        const [result] = await db.query(sql, [...values, id]);
-        return res.json({ Status: true, Result: result });
-    } catch (err) {
-        console.error('Query Error:', err);
-        return res.json({ Status: false, Error: "Query Error: " + err.message });
-    }
-});
-
-
-
-
- 
-
 
 export default router;

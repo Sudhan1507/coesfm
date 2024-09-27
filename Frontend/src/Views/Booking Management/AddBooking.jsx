@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/service";
 import Layout from "../../components/molecules/Layout/Layout";
 
 const AddBooking = () => {
+    const location = useLocation();
     const [booking, setBooking] = useState({
         zone: '',
         schoolName: '',
@@ -11,9 +12,9 @@ const AddBooking = () => {
         level: '',
         roomNo: '',
         roomName: '',
-        date: '',
-        timeStart: '',
-        timeEnd: '',
+        date: location.state?.date || '',
+        timeStart: location.state?.timeStart || '',
+        timeEnd: location.state?.timeEnd || '',
         remarks: '' || null,
         equipment: [],
     });
@@ -227,7 +228,7 @@ const AddBooking = () => {
         axiosInstance.post("/booking/add_booking", booking)
             .then((result) => {
                 if (result.data.success) {
-                    navigate('/display/booking');
+                    navigate('/display/space_management');
                 } else {
                     alert(`Error: ${result.data.error || 'Unknown error occurred'}`);
                 }
@@ -258,7 +259,7 @@ const AddBooking = () => {
                                                                 <div className="p-3 rounded">
                                                                     <h3 className="text-secondary text-center">Add Booking</h3>
                                                                     <form className="row g-3" onSubmit={handleSubmit}>
-                                                                        <div className="form-group">
+                                                                    <div className="form-group">
                                                                             <label htmlFor="zone" className="form-label">Zone</label>
                                                                             <select
                                                                                 name="zone"
@@ -431,6 +432,7 @@ const AddBooking = () => {
                                                                                 required
                                                                             />
                                                                         </div>
+
                                                                         <div className="form-group">
                                                                             <label htmlFor="remarks" className="form-label search-label">Remarks</label>
                                                                             <textarea
@@ -488,10 +490,11 @@ const AddBooking = () => {
                                                                                 )}
                                                                             </ul>
                                                                         </div>
+
                                                                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                                                <button className="btn btn-success me-md-2" type="submit">Submit</button>
-                                                                                <button className="btn btn-danger" onClick={() => navigate(-1)} type="button">Back</button>
-                                                                            </div>
+                                                                            <button className="btn btn-success me-md-2" type="submit">Submit</button>
+                                                                            <button className="btn btn-danger" onClick={() => navigate(-1)} type="button">Back</button>
+                                                                        </div>
                                                                     </form>
                                                                 </div>
                                                             </div>

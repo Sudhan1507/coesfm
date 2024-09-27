@@ -79,7 +79,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                           <span className='dropdown-item-report-text' onClick={() => { navigate('/display/report'); }}>Fault Report</span>
                         </div>
                         <div className='sidebar-contents-master-dropdown-list-booking'>
-                          <span className='dropdown-item-booking-text' onClick={() => { navigate('/display/booking'); }}>Booking Management</span>
+                          <span className='dropdown-item-booking-text' onClick={() => { navigate('/display/space_management'); }}>Booking Management</span>
                         </div>
                         <div className='sidebar-contents-master-dropdown-list-iaq'>
                           <span className='dropdown-item-iaq-text' onClick={() => { navigate('/display/iaq'); }}>IAQ Transaction</span>

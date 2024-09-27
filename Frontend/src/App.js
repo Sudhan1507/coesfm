@@ -28,11 +28,9 @@ import Add_Report from "./Views/Fault Report/Add_Report.jsx";
 import Edit_Report from "./Views/Fault Report/Edit_Report.jsx";
 import Fault_Report from './Views/Fault Report/Fault_Report.jsx'
 import QRCodePage from "./Views/Location/QRcodegen.jsx";
-import Booking from "./Views/Booking Management/Booking.jsx";
 import AddBooking from "./Views/Booking Management/AddBooking.jsx";
-import Booking_History from "./Views/Booking Management/Booking_History.jsx";
 import Edit_Booking from "./Views/Booking Management/Edit_booking.jsx";
-import CheckAvailability from "./Views/Booking Management/CheckAvailability.jsx";
+import Space_management from "./Views/Booking Management/space_management.jsx"
 import Iaq from "./Views/IAQ/Iaq.jsx";
 import './Main.css';
 
@@ -76,13 +74,10 @@ const App = () => {
         <Route path='/display/add_request' element={<Add_Report/>}></Route>
         <Route path='/display/edit_request/:id' element={<Edit_Report/>}></Route>
         <Route path='/display/fault_report' element={<Fault_Report/>}></Route>
-        
-        <Route path='/display/booking' element={<Booking/>}></Route>
-        <Route path='/display/add_booking' element={<AddBooking/>}></Route>
-        <Route path='/display/booking_history' element={<Booking_History/>}></Route>
-        <Route path='/display/edit_booking/:id' element={<Edit_Booking/>}></Route>
-        <Route path='/display/check-availability' element={<CheckAvailability/>}></Route>
 
+        <Route path='/display/add_booking' element={<AddBooking/>}></Route>
+        <Route path='/display/edit_booking/:id' element={<Edit_Booking/>}></Route>
+        <Route path='/display/space_management' element={<Space_management/>}></Route>
         <Route path='/display/iaq' element={<Iaq/>}></Route>
       </Route>
       <Route path="/" element={<Login/>}/>
