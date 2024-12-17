@@ -19,6 +19,7 @@ import SchoolRoutes from './src/routes/School_module/School/school_routes.js';
 import EmailRoutes from './src/routes/PTW_module/E-mail/email_routes.js';
 import PermitToWorkEmailRoutes from './src/routes/PTW_module/PermitToWork/ptwEmail_routes.js';
 import ProcurementRoutes from './src/routes/Procurement_module/procurement_routes.js';
+import VendorRoutes from './src/routes/Vendor_module/vendor_routes.js';
 
 
 dotenv.config({path:'./app.env'});
@@ -55,6 +56,7 @@ app.use('/reading',MeterreadingRoutes);
 app.use('/api/email', EmailRoutes);
 app.use('/api/ptw',PermitToWorkEmailRoutes);
 app.use(`/api/procurement`,ProcurementRoutes);
+app.use(`/api/vendor`,VendorRoutes);
 
 
 

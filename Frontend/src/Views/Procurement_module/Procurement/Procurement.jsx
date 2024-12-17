@@ -6,6 +6,13 @@ import Table from '../../../components/molecules/Table/Table.jsx';
 import Body from '../../../components/molecules/Body/Body.jsx';
 import Button from '../../../components/atoms/Button/Button.jsx';
 import axiosInstance from '../../../services/service.jsx';
+import Alert from '../../../components/atoms/Alert/Alert.jsx';
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
+import Tooltip from "../../../components/atoms/Tooltip/Tooltip.jsx";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import NewProcurement from '../../../components/organisms/Create/Procurement_module/NewProcurement/NewProcurement.jsx'
+
 
 const breadcrumbItems = [
   { label: "Dashboard", path: "/dashboard" },
@@ -15,15 +22,33 @@ const breadcrumbItems = [
 const Procurement = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState({
+    show: false,
+    type: '',
+    message: '',
+    duration: 3000,
+    icon: null,
+  });
+
+  const getActionCell = () => (
+    <div className='ptw-actions-icon'>
+      <Tooltip text='View' position='top'>
+        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} onClick={() => alert('view')} />
+      </Tooltip>
+      <Tooltip text='History' position='top'>
+        <UpdateOutlinedIcon style={{ cursor: "pointer" }} onClick={() => alert("History")} />
+      </Tooltip>
+    </div>
+  );
 
   const headers = [
-    { key: 'rfqId', label: 'RFQ Id' },
-    { key: 'status', label: 'Status' },
+    { key: 'id', label: 'RFQ Id' },
+    { key: 'status_name', label: 'Status' },
     { key: 'title', label: 'Title' },
-    { key: 'openDate', label: 'Open Date' },
-    { key: 'closingDate', label: 'Closing Date' },
-    { key: 'quotations', label: 'Quotations' },  // Corrected "qoutations" to "quotations"
-    { key: 'actions', label: 'Actions' }
+    { key: 'open_date', label: 'Open Date' },
+    { key: 'closing_date', label: 'Closing Date' },
+    { key: 'quotation', label: 'Quotations' }, 
+    { key: 'actions', label: 'Actions', renderer: getActionCell }
   ];
 
   const getProcurementIndex = useCallback(async () => {
@@ -43,9 +68,39 @@ const Procurement = () => {
     getProcurementIndex();
   }, [getProcurementIndex]);
 
+  const handleSave = () => {
+    getProcurementIndex();
+    showAlertHandler({
+      type: 'success',
+      message: 'New procurement data successfully added.',
+      duration: 3000,
+      icon: <CheckCircleOutlineIcon />
+    });
+  };
+
+  const showAlertHandler = ({ type, message, duration, icon }) => {
+    setShowAlert({
+      show: true,
+      type,
+      message,
+      duration,
+      icon
+    });
+    setTimeout(() => {
+      setShowAlert({
+        show: false,
+        type: '',
+        message: '',
+        duration: 3000,
+        icon: null,
+      });
+    }, duration);
+  };
+
   return (
     <>
       <Body header="Procurement" breadcrumbItems={breadcrumbItems}>
+        {/* {<NewProcurement onSave={handleSave} showAlert={showAlertHandler}  /> } */}
         <div className='procurement-container'>
           <div className='procurement-container-navitem'>
             <Button
@@ -66,10 +121,10 @@ const Procurement = () => {
             />
           </div>
         </div>
-        <Table
-          headers={headers}
-          data={data}
-        />
+        <Table headers={headers} data={data} />
+        {showAlert.show && (
+          <Alert type={showAlert.type} message={showAlert.message} duration={showAlert.duration} icon={showAlert.icon} />
+        )}
       </Body>
     </>
   );
