@@ -1,4 +1,4 @@
-import { useEffect,useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getUserData } from "../../../../../utils/utils.jsx";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
@@ -7,10 +7,10 @@ import FormHeader from "../../../../atoms/FormHeader/FormHeader.jsx";
 import FormFooter from "../../../../atoms/FormFooter/FormFooter.jsx";
 import axiosInstance from "../../../../../services/service.jsx";
 
-const UpdateParts=({row,onSave,onCancel,showAlert})=>{
-    const userdata = getUserData();
-    const [validationError, setValidationError] = useState({});
-    const [updateParts, setUpdateParts] = useState({
+const UpdateParts = ({ row, onSave, onCancel, showAlert }) => {
+  const userdata = getUserData();
+  const [validationError, setValidationError] = useState({});
+  const [updateParts, setUpdateParts] = useState({
     partname: "",
     partsType: "",
     quantity: "",
@@ -26,56 +26,56 @@ const UpdateParts=({row,onSave,onCancel,showAlert})=>{
     locQRID: "",
     partsImage: null,
     storeName: "",
-    });
+  });
 
-    const fieldLabels = {
-        partname: "Part Name",
-        partsType: "Part Type",
-        quantity: "Quantity",
-        unitOfMeasure: "Unit of Measure",
-        linkToAssetId: "Link to Asset ID",
-        locationZone: "Zone",
-        locationSchoolId: "School ID",
-        locationSchoolName: "School Name",
-        locationBlock: "Block",
-        locationLevel: "Level",
-        locationRoomNo: "Room No",
-        locationRoomName: "Room Name",
-        locQRID: "QR_ID",
-        partsImage: "Parts Image",
-        storeName: "Store Name",
-      };
+  const fieldLabels = {
+    partname: "Part Name",
+    partsType: "Part Type",
+    quantity: "Quantity",
+    unitOfMeasure: "Unit of Measure",
+    linkToAssetId: "Link to Asset ID",
+    locationZone: "Zone",
+    locationSchoolId: "School ID",
+    locationSchoolName: "School Name",
+    locationBlock: "Block",
+    locationLevel: "Level",
+    locationRoomNo: "Room No",
+    locationRoomName: "Room Name",
+    locQRID: "QR_ID",
+    partsImage: "Parts Image",
+    storeName: "Store Name",
+  };
 
-      const partsImageRef = useRef(null);
+  const partsImageRef = useRef(null);
 
-      useEffect(()=>{
-        if(row){
-            setUpdateParts({
-                partname:row.partname,
-                partsType: row.partsType,
-                quantity: row.quantity,
-                unitOfMeasure: row.unitOfMeasure,
-                linkToAssetId: row.linkToAssetId,
-                locationZone: row.locationZone,
-                locationSchoolId: row.locationSchoolId,
-                locationSchoolName: row.locationSchoolName,
-                locationBlock: row.locationBlock,
-                locationLevel: row.locationLevel,
-                locationRoomNo: row.locationRoomNo,
-                locationRoomName: row.locationRoomName,
-                locQRID: row.locQRID,
-                partsImage: row.partsImage,
-                storeName: row.storeName,
-            });
-        }
-
-      },[row]);
+  useEffect(() => {
+    if (row) {
+      setUpdateParts({
+        partname: row.partname,
+        partsType: row.partsType,
+        quantity: row.quantity,
+        unitOfMeasure: row.unitOfMeasure,
+        linkToAssetId: row.linkToAssetId,
+        locationZone: row.locationZone,
+        locationSchoolId: row.locationSchoolId,
+        locationSchoolName: row.locationSchoolName,
+        locationBlock: row.locationBlock,
+        locationLevel: row.locationLevel,
+        locationRoomNo: row.locationRoomNo,
+        locationRoomName: row.locationRoomName,
+        locQRID: row.locQRID,
+        partsImage: row.partsImage,
+        storeName: row.storeName,
+      });
+    }
+  }, [row]);
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
     if (name === "partsImage" && files && files[0]) {
       const file = files[0];
-      if (file.size > 5 * 1024 * 1024) { // Check if file size is greater than 5MB
+      if (file.size > 5 * 1024 * 1024) {
+        // Check if file size is greater than 5MB
         setValidationError((prevErrors) => ({
           ...prevErrors,
           partsImage: "File should be within 5MB.",
@@ -104,95 +104,96 @@ const UpdateParts=({row,onSave,onCancel,showAlert})=>{
     }
   };
 
-    
-      const handleClear = () => {
-        setUpdateParts({
-          partname: "",
-          partsType: "",
-          quantity: "",
-          unitOfMeasure: "",
-          linkToAssetId: "",
-          locationZone: "",
-          locationSchoolId: "",
-          locationSchoolName: "",
-          locationBlock: "",
-          locationLevel: "",
-          locationRoomNo: "",
-          locationRoomName: "",
-          locQRID: "",
-          partsImage: '',
-          storeName: "",
-        });
-        setValidationError({});
-        if (partsImageRef.current) {
-          partsImageRef.current.value = null;
-        }
-      };
-    
-      const validate = () => {
-        const errors = {};
-        Object.keys(updateParts).forEach((field) => {
-          if (!updateParts[field]) {
-            errors[field] = `${fieldLabels[field]} is required!`;
-          }
-        });
-        setValidationError(errors);
-        return Object.keys(errors).length === 0;
-      };
-    
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (validate()) {
-          const formData = {
-            partname: updateParts.partname,
-            partsType: updateParts.partsType,
-            quantity: Number(updateParts.quantity),
-            unitOfMeasure: updateParts.unitOfMeasure,
-            linkToAssetId: Number(updateParts.linkToAssetId),
-            locationZone: updateParts.locationZone,
-            locationSchoolId: Number(updateParts.locationSchoolId),
-            locationSchoolName: updateParts.locationSchoolName,
-            locationBlock: updateParts.locationBlock,
-            locationLevel: updateParts.locationLevel,
-            locationRoomNo: updateParts.locationRoomNo,
-            locationRoomName: updateParts.locationRoomName,
-            locQRID: updateParts.locQRID,
-            partsImage: updateParts.partsImage,
-            storeName: updateParts.storeName,
-            updateBy: Number(userdata.user.userId),
-          };
-    
-          try {
-            const response = await axiosInstance.put(`/parts/update/${row.partId}`, formData);
-            console.log('Form submitted successfully:', response.data.status);
-            handleClear();
-            onSave();
-            showAlert({
-              type: 'success',
-              message: 'Parts updated successfully.',
-              duration: 3000,
-              icon: <CheckCircleOutlineIcon />
-            });
-          } catch (error) {
-            console.error('Error:', error);
-            showAlert({
-              type: 'error',
-              message: 'Failed to update parts.',
-              duration: 3000,
-              icon: <ErrorOutlineOutlinedIcon />
-            });
-          }
-        }
-      };
-    
-      const handleCancel = () => {
-        onCancel();
-        handleClear();
+  const handleClear = () => {
+    setUpdateParts({
+      partname: "",
+      partsType: "",
+      quantity: "",
+      unitOfMeasure: "",
+      linkToAssetId: "",
+      locationZone: "",
+      locationSchoolId: "",
+      locationSchoolName: "",
+      locationBlock: "",
+      locationLevel: "",
+      locationRoomNo: "",
+      locationRoomName: "",
+      locQRID: "",
+      partsImage: "",
+      storeName: "",
+    });
+    setValidationError({});
+    if (partsImageRef.current) {
+      partsImageRef.current.value = null;
+    }
+  };
+
+  const validate = () => {
+    const errors = {};
+    Object.keys(updateParts).forEach((field) => {
+      if (!updateParts[field]) {
+        errors[field] = `${fieldLabels[field]} is required!`;
+      }
+    });
+    setValidationError(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validate()) {
+      const formData = {
+        partname: updateParts.partname,
+        partsType: updateParts.partsType,
+        quantity: Number(updateParts.quantity),
+        unitOfMeasure: updateParts.unitOfMeasure,
+        linkToAssetId: Number(updateParts.linkToAssetId),
+        locationZone: updateParts.locationZone,
+        locationSchoolId: Number(updateParts.locationSchoolId),
+        locationSchoolName: updateParts.locationSchoolName,
+        locationBlock: updateParts.locationBlock,
+        locationLevel: updateParts.locationLevel,
+        locationRoomNo: updateParts.locationRoomNo,
+        locationRoomName: updateParts.locationRoomName,
+        locQRID: updateParts.locQRID,
+        partsImage: updateParts.partsImage,
+        storeName: updateParts.storeName,
+        updateBy: Number(userdata.user.userId),
       };
 
-      return (
-        <>
-        <FormHeader title='Edit Parts' onClose={handleCancel} />
+      try {
+        const response = await axiosInstance.put(
+          `/parts/update/${row.partId}`,
+          formData
+        );
+        handleClear();
+        onSave();
+        showAlert({
+          type: "success",
+          message: "Parts updated successfully.",
+          duration: 3000,
+          icon: <CheckCircleOutlineIcon />,
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        showAlert({
+          type: "error",
+          message: "Failed to update parts.",
+          duration: 3000,
+          icon: <ErrorOutlineOutlinedIcon />,
+        });
+      }
+    }
+  };
+
+  const handleCancel = () => {
+    onCancel();
+    handleClear();
+  };
+
+  return (
+    <>
+      <FormHeader title="Edit Parts" onClose={handleCancel} />
       <div className="form-body">
         <Form
           label="Part Name"
@@ -331,13 +332,13 @@ const UpdateParts=({row,onSave,onCancel,showAlert})=>{
         />
       </div>
       <FormFooter
-        saveLabel='Save'
-        cancelLabel='Cancel'
+        saveLabel="Save"
+        cancelLabel="Cancel"
         onSave={handleSubmit}
         onCancel={handleCancel}
         onClear={handleClear}
       />
     </>
-      );
+  );
 };
 export default UpdateParts;

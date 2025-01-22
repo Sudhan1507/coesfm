@@ -54,33 +54,34 @@ const AddParts = ({ onSave, onCancel, showAlert }) => {
     const { name, value, files } = event.target;
     if (name === "partsImage" && files && files[0]) {
       const file = files[0];
-      if (file.size > 5 * 1024 * 1024) { // Check if file size is greater than 5MB
-        setValidationError(prevErrors => ({
+      if (file.size > 5 * 1024 * 1024) {
+        // Check if file size is greater than 5MB
+        setValidationError((prevErrors) => ({
           ...prevErrors,
           partsImage: "File should be within 5MB.",
         }));
         partsImageRef.current.value = null;
         return;
       } else {
-        setValidationError(prevErrors => ({
+        setValidationError((prevErrors) => ({
           ...prevErrors,
           partsImage: "",
         }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setParts({
-          ...parts,
-          partsImage: reader.result,
-        });
-      };
-      reader.readAsDataURL(files[0]);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setParts({
+            ...parts,
+            partsImage: reader.result,
+          });
+        };
+        reader.readAsDataURL(files[0]);
       }
     } else {
       setParts({
         ...parts,
         [name]: value,
       });
-    };
+    }
   };
 
   const handleClear = () => {
@@ -144,24 +145,23 @@ const AddParts = ({ onSave, onCancel, showAlert }) => {
 
       try {
         const response = await axiosInstance.post(`/parts/add`, formData);
-        console.log('Form submitted successfully:', response.data.status);
         handleClear();
         onSave();
         showAlert({
-          type: 'success',
-          message: 'New Parts Added successfully.',
+          type: "success",
+          message: "New Parts Added successfully.",
           duration: 3000,
-          icon: <CheckCircleOutlineIcon />
+          icon: <CheckCircleOutlineIcon />,
         });
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
         showAlert({
-          type: 'error',
-          message: 'Failed to add parts.',
+          type: "error",
+          message: "Failed to add parts.",
           duration: 3000,
-          icon: <ErrorOutlineOutlinedIcon />
+          icon: <ErrorOutlineOutlinedIcon />,
         });
-      }finally {
+      } finally {
         setLoading(false); // End loading
       }
     }
@@ -174,7 +174,7 @@ const AddParts = ({ onSave, onCancel, showAlert }) => {
 
   return (
     <>
-      <FormHeader title='Add Parts' onClose={handleCancel}/>
+      <FormHeader title="Add Parts" onClose={handleCancel} />
       <div className="form-body">
         <Form
           label="Part Name"
@@ -313,8 +313,8 @@ const AddParts = ({ onSave, onCancel, showAlert }) => {
         />
       </div>
       <FormFooter
-        saveLabel='Save'
-        cancelLabel='Cancel'
+        saveLabel="Save"
+        cancelLabel="Cancel"
         onSave={handleSubmit}
         onCancel={handleCancel}
       />

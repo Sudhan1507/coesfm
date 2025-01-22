@@ -10,26 +10,31 @@ import { getUserData } from "../../../../../utils/utils.jsx";
 const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
   const userdata = getUserData();
   const [updateStep, setUpdateStep] = useState({
-    statusName: '',
-    declaration: '',
-    userId: ''
+    statusName: "",
+    declaration: "",
+    userId: "",
   });
 
   const [validationError, setValidationError] = useState({});
   const [account, setAccount] = useState([]);
 
   const fieldLabels = {
-    statusName: 'Status Name',
-    declaration: 'Declaration'
+    statusName: "Status Name",
+    declaration: "Declaration",
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const accountResponse = await axiosInstance.get('/account/names');
-        setAccount(accountResponse.data.map(item => ({ value: item.userId, label: item.displayName })));
+        const accountResponse = await axiosInstance.get("/account/names");
+        setAccount(
+          accountResponse.data.map((item) => ({
+            value: item.userId,
+            label: item.displayName,
+          }))
+        );
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -41,14 +46,14 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
       setUpdateStep({
         statusName: row.statusName,
         declaration: row.declaration,
-        userId: row.userId || ''
+        userId: row.userId || "",
       });
     }
   }, [row]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUpdateStep(prevStep => ({
+    setUpdateStep((prevStep) => ({
       ...prevStep,
       [name]: value,
     }));
@@ -56,9 +61,9 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
 
   const handleClear = () => {
     setUpdateStep({
-      statusName: '',
-      declaration: '',
-      userId: ''
+      statusName: "",
+      declaration: "",
+      userId: "",
     });
     setValidationError({});
   };
@@ -67,7 +72,7 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
     const errors = {};
 
     Object.keys(updateStep).forEach((field) => {
-      if (!updateStep[field] && field !== 'userId') {
+      if (!updateStep[field] && field !== "userId") {
         errors[field] = `${fieldLabels[field]} is required!`;
       }
     });
@@ -80,30 +85,32 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
     e.preventDefault();
     if (validate()) {
       const formData = {
-        'statusName': updateStep.statusName,
-        'declaration': updateStep.declaration,
-        'userId': updateStep.userId ? Number(updateStep.userId) : null,
-        'updatedBy': userdata.user.userId
+        statusName: updateStep.statusName,
+        declaration: updateStep.declaration,
+        userId: updateStep.userId ? Number(updateStep.userId) : null,
+        updatedBy: userdata.user.userId,
       };
 
       try {
-        const response = await axiosInstance.put(`/flow/updateStep/${row.flowId}/${row.stepNo}`, formData);
-        console.log('Form updated successfully:', response.data);
+        const response = await axiosInstance.put(
+          `/flow/updateStep/${row.flowId}/${row.stepNo}`,
+          formData
+        );
         handleClear();
         onSave();
         showAlert({
-          type: 'success',
+          type: "success",
           message: `Step ${row.stepNo} has been successfully updated.`,
           duration: 3000,
-          icon: <CheckCircleOutlineIcon />
+          icon: <CheckCircleOutlineIcon />,
         });
       } catch (error) {
-        console.error('Error submitting form:', error);
+        console.error("Error submitting form:", error);
         showAlert({
-          type: 'error',
+          type: "error",
           message: `Failed to update Step ${row.stepNo}.`,
           duration: 3000,
-          icon: <ErrorOutlineOutlinedIcon />
+          icon: <ErrorOutlineOutlinedIcon />,
         });
       }
     }
@@ -116,8 +123,8 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
 
   return (
     <>
-      <FormHeader title='Edit Step' />
-      <div className='form-body'>
+      <FormHeader title="Edit Step" />
+      <div className="form-body">
         <Form
           label="Status Name"
           name="statusName"
@@ -140,7 +147,7 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
           label="Assign To"
           type="select"
           name="userId"
-          value={updateStep.userId || ''}
+          value={updateStep.userId || ""}
           onChange={handleChange}
           options={account}
           required={false}
@@ -149,8 +156,8 @@ const UpdateFlowStep = ({ row, onSave, onCancel, showAlert }) => {
       <FormFooter
         onSave={handleSubmit}
         onCancel={handleCancel}
-        saveLabel='Save'
-        cancelLabel='Cancel'
+        saveLabel="Save"
+        cancelLabel="Cancel"
       />
     </>
   );

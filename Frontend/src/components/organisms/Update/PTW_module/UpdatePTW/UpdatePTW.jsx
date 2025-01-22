@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import './UpdatePTW.css';
+import "./UpdatePTW.css";
 import Form from "../../../../molecules/Form/Form.jsx";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import FormHeader from "../../../../atoms/FormHeader/FormHeader.jsx";
 import FormFooter from "../../../../atoms/FormFooter/FormFooter.jsx";
 import axiosInstance from "../../../../../services/service.jsx";
@@ -11,12 +11,12 @@ import { getUserData } from "../../../../../utils/utils.jsx";
 const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
   const userdata = getUserData();
   const [updatePermitType, setUpdatePermitType] = useState({
-    ptName: '',
-    checklistId: '',
-    flowId: '',
-    reqId: '',
-    remarks: '',
-    active: ''
+    ptName: "",
+    checklistId: "",
+    flowId: "",
+    reqId: "",
+    remarks: "",
+    active: "",
   });
 
   const fieldLabels = {
@@ -25,7 +25,7 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
     flowId: "Flow Name",
     reqId: "Req Tag",
     remarks: "Remarks",
-    active: "Active Status"
+    active: "Active Status",
   };
 
   const [validationError, setValidationError] = useState({});
@@ -36,14 +36,29 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const checklistResponse = await axiosInstance.get('/checklist/names');
-        setChecklists(checklistResponse.data.map(item => ({ value: item.checklistId, label: item.cName })));
-        const flowResponse = await axiosInstance.get('/flow/names');
-        setFlows(flowResponse.data.map(item => ({ value: item.flowId, label: item.flowName })));
-        const reqTagResponse = await axiosInstance.get('/requestor/names');
-        setReqTags(reqTagResponse.data.map(item => ({ value: item.reqId, label: item.reqName })));
+        const checklistResponse = await axiosInstance.get("/checklist/names");
+        setChecklists(
+          checklistResponse.data.map((item) => ({
+            value: item.checklistId,
+            label: item.cName,
+          }))
+        );
+        const flowResponse = await axiosInstance.get("/flow/names");
+        setFlows(
+          flowResponse.data.map((item) => ({
+            value: item.flowId,
+            label: item.flowName,
+          }))
+        );
+        const reqTagResponse = await axiosInstance.get("/requestor/names");
+        setReqTags(
+          reqTagResponse.data.map((item) => ({
+            value: item.reqId,
+            label: item.reqName,
+          }))
+        );
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -58,27 +73,27 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
         flowId: row.flowId,
         reqId: row.reqId,
         remarks: row.remarks,
-        active: row.active
+        active: row.active,
       });
     }
   }, [row]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUpdatePermitType(prevState => ({
+    setUpdatePermitType((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleClear = () => {
     setUpdatePermitType({
-      ptName: '',
-      checklistId: '',
-      flowId: '',
-      reqId: '',
-      remarks: '',
-      active: ''
+      ptName: "",
+      checklistId: "",
+      flowId: "",
+      reqId: "",
+      remarks: "",
+      active: "",
     });
     setValidationError({});
   };
@@ -88,7 +103,7 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
 
     Object.keys(updatePermitType).forEach((field) => {
       if (!updatePermitType[field]) {
-        errors[field] =  `${fieldLabels[field]} is required!`;
+        errors[field] = `${fieldLabels[field]} is required!`;
       }
     });
 
@@ -106,27 +121,29 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
         reqId: Number(updatePermitType.reqId),
         remarks: updatePermitType.remarks,
         active: updatePermitType.active,
-        updatedBy: userdata.user.userId
+        updatedBy: userdata.user.userId,
       };
 
       try {
-        const response = await axiosInstance.put(`/permitType/update/${row.ptId}`, formData);
-        console.log('Form updated successfully:', response.data);
+        const response = await axiosInstance.put(
+          `/permitType/update/${row.ptId}`,
+          formData
+        );
         handleClear();
         onSave();
         showAlert({
-          type: 'success',
-          message: 'Permit Type has been successfully updated.',
+          type: "success",
+          message: "Permit Type has been successfully updated.",
           duration: 3000,
-          icon: <CheckCircleOutlineIcon />
+          icon: <CheckCircleOutlineIcon />,
         });
       } catch (error) {
-        console.error('Error submitting form:', error);
+        console.error("Error submitting form:", error);
         showAlert({
-          type: 'error',
-          message: 'Failed to update Permit Type.',
+          type: "error",
+          message: "Failed to update Permit Type.",
           duration: 3000,
-          icon: <ErrorOutlineOutlinedIcon />
+          icon: <ErrorOutlineOutlinedIcon />,
         });
       }
     }
@@ -139,7 +156,7 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
 
   return (
     <>
-      <FormHeader title='Update Permit Type' />
+      <FormHeader title="Update Permit Type" />
       <div className="form-body">
         <Form
           label="Permit Type Name"
@@ -190,18 +207,21 @@ const UpdatePTW = ({ row, onSave, onCancel, showAlert }) => {
           type="select"
           value={updatePermitType.active}
           onChange={handleChange}
-          options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}
+          options={[
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
+          ]}
           error={validationError.active}
         />
       </div>
       <FormFooter
         onSave={handleSubmit}
         onCancel={handleCancel}
-        saveLabel='Save'
-        cancelLabel='Cancel'
+        saveLabel="Save"
+        cancelLabel="Cancel"
       />
     </>
   );
-}
+};
 
 export default UpdatePTW;
