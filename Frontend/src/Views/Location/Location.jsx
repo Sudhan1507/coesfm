@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { HiPencilSquare } from "react-icons/hi2";
+import { MdQrCodeScanner } from "react-icons/md";
 import axiosInstance from "../../services/service";
 import Layout from "../../components/molecules/Layout/Layout";
 
@@ -159,6 +160,11 @@ const Location = () => {
                                       >
                                         <MdDelete />
                                       </button>
+
+                                      <Link className="btn btn-primary" to={`/display/qrcode/${e.locQRID}`}> 
+                                      <MdQrCodeScanner />
+                                      </Link>
+
                                     </td>
                                   </tr>
                                 ))}
