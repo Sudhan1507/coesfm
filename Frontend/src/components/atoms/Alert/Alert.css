@@ -1,21 +1,27 @@
 .alert {
   position: fixed;
-  top: 20px;
-  left: 50%;
-   transform: translateX(-50%); /* Centers the alert horizontally */
-  padding: .5rem .5rem;
+  bottom: 20px; /* Positioned at the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center alignment */
+  padding: 0.8rem 1.2rem;
   border-radius: 0.5rem;
   color: white;
+  background-color: #333; /* Default snackbar background */
   z-index: 1000;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Center align items inside the alert */
-  justify-content: space-between;
-  max-width: 90vw; /* Ensure it doesn't exceed viewport width */
-  box-sizing: border-box; /* Ensures padding is included within the width */
-  text-align: center; /* Center align text inside the alert */
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  animation: "fade-in 0.3s ease, fade-out 0.3s ease";
+  opacity: 1;
 }
 
+.alert-success {
+  background-color: #4caf50; /* Green for success */
+}
+
+.alert-error {
+  background-color: #f44336; /* Red for errors */
+}
 
 .alert-content {
   display: flex;
@@ -24,54 +30,27 @@
 
 .alert-icon {
   margin-right: 0.5rem;
+  font-size: 1.2rem;
 }
 
-.alert-success {
-  background-color: green;
-}
-
-.alert-failure {
-  background-color: red;
-}
-
-.alert-error {
-  background-color: darkred;
-}
-
-.alert-loading {
-  width: 20%;
-  height: 0.3rem;
-  background: rgba(255, 255, 255, 0.5);
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-  animation: loading linear;
-}
-
-@keyframes loading {
+@keyframes fade-in {
   from {
-      width: 100%;
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
   }
   to {
-      width: 0;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 }
 
-/* Media query for devices with max-width of 768px */
-@media (max-width: 768px) {
-  .alert {
-      right: 10px;
-      left: 10px;
-      padding: 0.5rem 1rem; /* Adjust padding for smaller screens */
-      align-items: center; /* Center align items on smaller screens */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
-
-  .alert-content {
-      flex-direction: column;
-      align-items: center;
-  }
-
-  .alert-icon {
-      margin-right: 0;
-      margin-bottom: 0.5rem;
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
   }
 }
